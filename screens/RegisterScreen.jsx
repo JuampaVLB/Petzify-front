@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {
-  ImageBackground,
   View,
   TextInput,
-  Button,
   StyleSheet,
   Alert,
   Text,
@@ -65,28 +63,17 @@ const RegisterScreen = () => {
         />
         <TouchableOpacity
           onPress={() => handleSubmit()}
-          style={{
-            backgroundColor: "purple",
-            padding: 10,
-            marginTop: "20%",
-            width: "50%",
-            alignSelf: "center",
-            borderRadius: 10,
-          }}
+          style={styles.button}
         >
           <Text
-            style={{
-              fontSize: 15,
-              textAlign: "center",
-              color: "white",
-            }}
+            style={styles.text}
           >
             Registrarse
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text
-            style={{ color: "midnightblue", textDecorationLine: "underline" }}
+            style={styles.link}
           >
             Ya tengo cuenta
           </Text>
@@ -123,6 +110,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  button: {
+    backgroundColor: "mediumseagreen",
+    padding: 10,
+    width: "80%",
+    alignSelf: "center",
+    borderRadius: 10,
+  },
+  text: {
+    fontSize: 15,
+    textAlign: "center",
+    color: "white",
+  },
+  link: {
+    marginTop: "5%",
+    color: "midnightblue",
+    textDecorationLine: "underline"
+  }
 });
 
 export default RegisterScreen;

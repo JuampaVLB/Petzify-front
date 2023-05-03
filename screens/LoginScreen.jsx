@@ -3,57 +3,12 @@ import {
   Alert,
   View,
   TextInput,
-  Button,
-  ImageBackground,
   TouchableOpacity,
   Text,
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-
-const styles = StyleSheet.create({
-  image: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#ccc",
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  form: {
-    width: "90%",
-    minHeight: "40%",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    flexDirection: "column",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 5,
-    padding: 10,
-    margin: 10,
-    width: "80%",
-    backgroundColor: "white",
-  },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: 50,
-    backgroundColor: "#87CEEB",
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
-  },
-});
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -106,29 +61,15 @@ const LoginScreen = () => {
           defaultValue={password}
         />
 
-        <TouchableOpacity
-          onPress={() => handleSubmit()}
-          style={{
-            backgroundColor: "purple",
-            padding: 10,
-            marginTop: "20%",
-            width: "50%",
-            alignSelf: "center",
-            borderRadius: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              textAlign: "center",
-              color: "white",
-            }}
-          >
+        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
+          <Text style={styles.text}>
             Acceder
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={{color:'midnightblue', textDecorationLine:'underline'}}>
+          <Text
+            style={styles.link}
+          >
             Crear Cuenta
           </Text>
         </TouchableOpacity>
@@ -136,5 +77,50 @@ const LoginScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#ccc",
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  form: {
+    width: "90%",
+    minHeight: "40%",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 5,
+    padding: 10,
+    margin: 10,
+    width: "80%",
+    backgroundColor: "white",
+  },
+  button: {
+    backgroundColor: "mediumseagreen",
+    padding: 10,
+    width: "80%",
+    alignSelf: "center",
+    borderRadius: 10,
+  },
+  text: {
+    fontSize: 15,
+    textAlign: "center",
+    color: "white",
+  },
+  link: {
+    color: "midnightblue",
+    textDecorationLine: "underline"
+  }
+});
 
 export default LoginScreen;
