@@ -22,7 +22,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.juampavlb.caninifront"
+      "package": "com.juampavlb.caninifront",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBKuL53hpQ8NRko_4VUvtiO2Lz4XQJh2EA"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
