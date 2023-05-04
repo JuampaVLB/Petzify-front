@@ -11,7 +11,7 @@ const MainScreen = () => {
           marginTop: "40%"
         }}
         >
-            MainScreen
+            MainScreen 2
         </Text>
     </View>
   )

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import DrawerMenu from '../nav/DrawerMenu';
 import DogAIScreen from "./DogAIScreen";
 import MapScreen from "./MapScreen";
 import MainScreen from "./MainScreen";
@@ -20,7 +21,7 @@ function MyTabs() {
     >
       <Tab.Screen
         name="Main"
-        component={MainScreen}
+        component={DrawerMenu}
         options={{
           tabBarLabel: "Home",
           headerShown: false,
