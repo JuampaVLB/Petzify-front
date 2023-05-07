@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import dog from '../assets/img/dog.jpeg';
 
@@ -24,21 +24,20 @@ const CustomDrawer = (props) => {
 const styles = StyleSheet.create({
     profile: {
         width: "100%",
-        height: "200px",
-        backgroundColor: "",
+        height: 200,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center"
     },
     image: {
-        width: "100px",
-        height: "100px",
-        borderRadius: "50%"
+        width: 100,
+        height: 100,
+        borderRadius: 50
     },
     data: {
         display: "flex",
-        gap: "5px",
+        gap: 5,
     },
     text: {
         fontSize: 18
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
     menu: {
         display: "flex",
     }
-
 });
 
 export default CustomDrawer

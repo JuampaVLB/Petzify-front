@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import MapView from 'react-native-maps';
 
 
@@ -21,7 +20,8 @@ const MapScreen = () => {
           defaultValue={search}
           onChangeText={(newText) => setSearch(newText)}
         />
-        <MapView 
+        
+       <MapView 
         style={styles.map} 
         initialRegion={{
           latitude: origin.latitute,
@@ -30,6 +30,7 @@ const MapScreen = () => {
           longitudeDelta: 0.04
         }}
         />
+      
     </View>
   )
 }

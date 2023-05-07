@@ -11,10 +11,14 @@ const MainScreen = () => {
           marginTop: "40%"
         }}
         >
-            MainScreen 2
+            MainScreen
         </Text>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+
+});
 
 export default MainScreen

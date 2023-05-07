@@ -52,7 +52,6 @@ const RegisterScreen = () => {
           style={styles.input}
           placeholder="Correo electrónico"
           defaultValue={email}
-          inputMode="email"
           onChangeText={(newText) => setEmail(newText)}
         />
         <TextInput
