@@ -7,12 +7,14 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  
   const navigation = useNavigation();
 
   const handleSubmit = () => {
@@ -33,7 +35,9 @@ const LoginScreen = () => {
 
         navigation.navigate("Home");
 
-        // Alert.alert(token);
+        SaveToken(token);
+
+        Alert.alert(token);
       })
       .catch(function (error) {
         if (error.response.data.length >= 1) {
@@ -43,6 +47,14 @@ const LoginScreen = () => {
         }
       });
   };
+
+  const SaveToken = async (token) => {
+    try {
+      await AsyncStorage.setItem('TokenJWT', token);
+    } catch (error) {
+      throw error;
+    }
+  }
 
   return (
     <View style={styles.image}>
@@ -62,16 +74,10 @@ const LoginScreen = () => {
         />
 
         <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
-          <Text style={styles.text}>
-            Acceder
-          </Text>
+          <Text style={styles.text}>Acceder</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text
-            style={styles.link}
-          >
-            Crear Cuenta
-          </Text>
+          <Text style={styles.link}>Crear Cuenta</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -119,8 +125,8 @@ const styles = StyleSheet.create({
   },
   link: {
     color: "midnightblue",
-    textDecorationLine: "underline"
-  }
+    textDecorationLine: "underline",
+  },
 });
 
 export default LoginScreen;

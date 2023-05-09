@@ -22,8 +22,6 @@ function MyStack() {
   );
 }
 
-const Tab = createBottomTabNavigator();
-
 export default function Navigation() {
   return <MyStack />;
 }

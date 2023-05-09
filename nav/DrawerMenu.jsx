@@ -10,6 +10,8 @@ import Adoptions from '../screens/drawer/Adoptions';
 import PetShop from '../screens/drawer/PetShop';
 import Profile from '../screens/drawer/Profile';
 import Settings from '../screens/drawer/Settings';
+import Logout from '../screens/drawer/Logout';
+
 function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -40,7 +42,7 @@ export default function DrawerMenu() {
         <Drawer.Screen name="Adopciones" component={Adoptions} />
         <Drawer.Screen name="Pet Shop" component={PetShop} />
         <Drawer.Screen name="Configuracion" component={Settings} />
-        <Drawer.Screen name="Cerrar Sesion" component={MainScreen} />
+        <Drawer.Screen name="Cerrar Sesion" component={Logout} />
       </Drawer.Navigator>
   );
 }
