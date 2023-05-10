@@ -7,6 +7,7 @@ import {
   Alert,
   Text,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -40,7 +41,10 @@ const RegisterScreen = () => {
   };
 
   return (
-    <View style={styles.image}>
+    <ImageBackground
+      source={require("../../assets/img/fondo2.jpeg")}
+      style={styles.image}
+    >
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -61,25 +65,14 @@ const RegisterScreen = () => {
           defaultValue={password}
           onChangeText={(newText) => setPassword(newText)}
         />
-        <TouchableOpacity
-          onPress={() => handleSubmit()}
-          style={styles.button}
-        >
-          <Text
-            style={styles.text}
-          >
-            Registrarse
-          </Text>
+        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
+          <Text style={styles.text}>Registrarse</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Text
-            style={styles.link}
-          >
-            Ya tengo cuenta
-          </Text>
+          <Text style={styles.link}>Ya tengo cuenta</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -106,7 +99,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#ccc",
     flex: 1,
-    resizeMode: "cover",
+    resizeMode: "contain",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -123,10 +116,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   link: {
-    marginTop: "5%",
-    color: "midnightblue",
-    textDecorationLine: "underline"
-  }
+    marginTop: 5,
+    backgroundColor: "brown",
+    padding: 10,
+    width: "100%",
+    alignSelf: "center",
+    borderRadius: 10,
+    color: "white",
+  },
 });
 
 export default RegisterScreen;

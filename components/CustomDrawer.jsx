@@ -41,15 +41,15 @@ const CustomDrawer = (props) => {
       <View style={styles.profile}>
         <Image source={dog} style={styles.image} />
         <View style={styles.data}>
-          <Text style={styles.text}>Mi Perfil</Text>
-          <Text style={styles.text}>Seguidores: 100</Text>
-          <Text style={styles.text}>Seguidos: 50</Text>
+          <Text style={styles.text}>JuampaVLB</Text>
+          <Text style={styles.text}>Seguidores: 200</Text>
+          <Text style={styles.type}>Institucion</Text>
         </View>
       </View>
       <DrawerContentScrollView {...props} style={styles.menu}>
         <DrawerItemList {...props} />
         <TouchableOpacity style={styles.logout} onPress={() => YesOrNo()}>
-          <Text style={{ color: "lightgray" }}>Cerrar Sesion</Text>
+          <Text style={{ color: "white" }}>Cerrar Sesion</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
     </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-  },
+  }, 
   image: {
     width: 100,
     height: 100,
@@ -76,6 +76,16 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+  },
+  type: {
+    padding: 2,
+    textAlign: "center",
+    fontSize: 17,
+    width: "100%",
+    backgroundColor: "orange",
+    border: "2px solid orange",
+    borderRadius: 20,
+    color: "#fff",
   },
   menu: {
     margin: 0,

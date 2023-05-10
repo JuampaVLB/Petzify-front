@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  ImageBackground,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -13,7 +14,6 @@ import {
   ALERT_TYPE,
   Dialog,
   AlertNotificationRoot,
-  Toast,
 } from "react-native-alert-notification";
 import axios from "axios";
 
@@ -50,18 +50,14 @@ const LoginScreen = () => {
         password,
       },
     })
-      .then(function (response) {
+      .then(async function (response) {
         let token = response.headers.get("auth-token");
 
         // Alert.alert(
         //   `Login Exitoso! ${response.data.user.username} - ${response.data.user.email}`
         // );
-
-        navigation.navigate("Home");
         Success();
-        //SaveToken(token);
-
-        // Alert.alert(token);
+        SaveToken(token);
       })
       .catch(function (error) {
         if (error.response.data.length >= 1) {
@@ -77,6 +73,7 @@ const LoginScreen = () => {
   const SaveToken = async (token) => {
     try {
       await AsyncStorage.setItem("TokenJWT", token);
+      await navigation.navigate("Home");
     } catch (error) {
       throw error;
     }
@@ -84,7 +81,10 @@ const LoginScreen = () => {
 
   return (
     <AlertNotificationRoot>
-      <View style={styles.image}>
+      <ImageBackground
+        source={require("../../assets/img/fondo1.jpeg")}
+        style={styles.image}
+      >
         <View style={styles.form}>
           <TextInput
             style={styles.input}
@@ -100,14 +100,17 @@ const LoginScreen = () => {
             defaultValue={password}
           />
 
-          <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
+          <TouchableOpacity
+            onPress={() => handleSubmit()}
+            style={styles.button}
+          >
             <Text style={styles.text}>Acceder</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={styles.link}>Crear Cuenta</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     </AlertNotificationRoot>
   );
 };
@@ -152,8 +155,13 @@ const styles = StyleSheet.create({
     color: "white",
   },
   link: {
-    color: "midnightblue",
-    textDecorationLine: "underline",
+    marginTop: 5,
+    backgroundColor: "brown",
+    padding: 10,
+    width: "100%",
+    alignSelf: "center",
+    borderRadius: 10,
+    color: "white",
   },
 });
 
