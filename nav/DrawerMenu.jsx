@@ -10,7 +10,6 @@ import Adoptions from '../screens/drawer/Adoptions';
 import PetShop from '../screens/drawer/PetShop';
 import Profile from '../screens/drawer/Profile';
 import Settings from '../screens/drawer/Settings';
-import Logout from '../screens/drawer/Logout';
 
 function HomeScreen({ navigation }) {
   return (
@@ -36,23 +35,6 @@ const Drawer = createDrawerNavigator();
 
 export default function DrawerMenu() {
 
-  const YesOrNo = () => {
-    Alert.alert("Quieres Cerrar Sesion ?", "My Alert Msg", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: async () => {
-          await AsyncStorage.removeItem("TokenJWT");
-          navigation.navigate("Login");
-        },
-      },
-    ]);
-  };
-
   return (
       <Drawer.Navigator initialRouteName="Home" drawerContent={props => <CustomDrawer {...props} />}>
         <Drawer.Screen name="Inicio" component={MainScreen} />
@@ -61,7 +43,6 @@ export default function DrawerMenu() {
         <Drawer.Screen name="Adopciones" component={Adoptions} />
         <Drawer.Screen name="Pet Shop" component={PetShop} />
         <Drawer.Screen name="Configuracion" component={Settings} />
-        {/* <Drawer.Screen name="Cerrar Sesion" onPress={() => YesOrNo} /> */}
       </Drawer.Navigator>
   );
 }

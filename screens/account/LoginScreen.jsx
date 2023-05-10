@@ -9,13 +9,37 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 import axios from "axios";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const navigation = useNavigation();
+
+  const Success = () => {
+    Dialog.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: "Success",
+      textBody: "Login Exitoso!",
+      button: "close",
+    });
+  };
+
+  const Danger = (str) => {
+    Dialog.show({
+      type: ALERT_TYPE.DANGER,
+      title: "Danger",
+      textBody: str,
+      button: "close",
+    });
+  };
 
   const handleSubmit = () => {
     axios({
@@ -29,58 +53,62 @@ const LoginScreen = () => {
       .then(function (response) {
         let token = response.headers.get("auth-token");
 
-        Alert.alert(
-          `Login Exitoso! ${response.data.user.username} - ${response.data.user.email}`
-        );
+        // Alert.alert(
+        //   `Login Exitoso! ${response.data.user.username} - ${response.data.user.email}`
+        // );
 
         navigation.navigate("Home");
+        Success();
+        //SaveToken(token);
 
-        SaveToken(token);
-
-        Alert.alert(token);
+        // Alert.alert(token);
       })
       .catch(function (error) {
         if (error.response.data.length >= 1) {
-          Alert.alert(error.response.data[0].message);
+          //Alert.alert(error.response.data[0].message);
+          Danger(error.response.data[0].message);
         } else {
-          Alert.alert(error.response.data.message);
+          //Alert.alert(error.response.data.message);
+          Danger(error.response.data.message);
         }
       });
   };
 
   const SaveToken = async (token) => {
     try {
-      await AsyncStorage.setItem('TokenJWT', token);
+      await AsyncStorage.setItem("TokenJWT", token);
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   return (
-    <View style={styles.image}>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingrese su usuario"
-          defaultValue={username}
-          onChangeText={(newText) => setUsername(newText)}
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          placeholder="Ingrese su contraseña"
-          onChangeText={(newText) => setPassword(newText)}
-          defaultValue={password}
-        />
+    <AlertNotificationRoot>
+      <View style={styles.image}>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="Ingrese su usuario"
+            defaultValue={username}
+            onChangeText={(newText) => setUsername(newText)}
+          />
+          <TextInput
+            secureTextEntry={true}
+            style={styles.input}
+            placeholder="Ingrese su contraseña"
+            onChangeText={(newText) => setPassword(newText)}
+            defaultValue={password}
+          />
 
-        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
-          <Text style={styles.text}>Acceder</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.link}>Crear Cuenta</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
+            <Text style={styles.text}>Acceder</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.link}>Crear Cuenta</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </AlertNotificationRoot>
   );
 };
 

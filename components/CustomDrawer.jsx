@@ -1,12 +1,41 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+
 import dog from "../assets/img/dog.jpeg";
 
 const CustomDrawer = (props) => {
+  const navigation = useNavigation();
+
+  const YesOrNo = () => {
+    Alert.alert("CERRAR SESION", "No Podras Revertir Esto!", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: async () => {
+          await AsyncStorage.removeItem("TokenJWT");
+          navigation.navigate("Login");
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={{ flex: 5 }}>
       <View style={styles.profile}>
@@ -19,8 +48,8 @@ const CustomDrawer = (props) => {
       </View>
       <DrawerContentScrollView {...props} style={styles.menu}>
         <DrawerItemList {...props} />
-        <TouchableOpacity style={styles.logout}>
-          <Text>Cerrar Sesion</Text>
+        <TouchableOpacity style={styles.logout} onPress={() => YesOrNo()}>
+          <Text style={{ color: "lightgray" }}>Cerrar Sesion</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
     </View>
@@ -59,7 +88,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     backgroundColor: "green",
     borderRadius: 5,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 20,
