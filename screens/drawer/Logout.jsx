@@ -6,23 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 const Logout = () => {
   const navigation = useNavigation();
 
-  const createTwoButtonAlert = () => {
-    Alert.alert("Quieres Cerrar Sesion ?", "My Alert Msg", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: async () => {
-          await AsyncStorage.removeItem("TokenJWT");
-          navigation.navigate("Login");
-        },
-      },
-    ]);
-  };
-  return <View>{createTwoButtonAlert()}</View>;
+  
+  return <View>{YesOrNo()}</View>;
 };
 
 export default Logout;

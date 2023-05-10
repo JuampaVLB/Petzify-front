@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, View } from 'react-native';
+import { Button, View, Alert } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import CustomDrawer from '../components/CustomDrawer';
@@ -24,6 +24,7 @@ function HomeScreen({ navigation }) {
 }
 
 function NotificationsScreen({ navigation }) {
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button onPress={() => navigation.goBack()} title="Go back home" />
@@ -34,6 +35,24 @@ function NotificationsScreen({ navigation }) {
 const Drawer = createDrawerNavigator();
 
 export default function DrawerMenu() {
+
+  const YesOrNo = () => {
+    Alert.alert("Quieres Cerrar Sesion ?", "My Alert Msg", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: async () => {
+          await AsyncStorage.removeItem("TokenJWT");
+          navigation.navigate("Login");
+        },
+      },
+    ]);
+  };
+
   return (
       <Drawer.Navigator initialRouteName="Home" drawerContent={props => <CustomDrawer {...props} />}>
         <Drawer.Screen name="Inicio" component={MainScreen} />
@@ -42,7 +61,7 @@ export default function DrawerMenu() {
         <Drawer.Screen name="Adopciones" component={Adoptions} />
         <Drawer.Screen name="Pet Shop" component={PetShop} />
         <Drawer.Screen name="Configuracion" component={Settings} />
-        <Drawer.Screen name="Cerrar Sesion" component={Logout} />
+        {/* <Drawer.Screen name="Cerrar Sesion" onPress={() => YesOrNo} /> */}
       </Drawer.Navigator>
   );
 }

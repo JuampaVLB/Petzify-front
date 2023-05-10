@@ -1,50 +1,70 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import dog from '../assets/img/dog.jpeg';
+import React from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import dog from "../assets/img/dog.jpeg";
 
 const CustomDrawer = (props) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.profile}>
-            <Image source = {dog} style={styles.image}/>
-            <View style={styles.data}>
-            <Text style={styles.text}>Mi Perfil</Text>
-            <Text style={styles.text}>Seguidores:  100</Text>
-            <Text style={styles.text}>Seguidos:  50</Text>
-            </View>
-            </View>
-            <DrawerContentScrollView {...props} style={styles.menu}>
-                <DrawerItemList {...props} />
-            </DrawerContentScrollView>
+  return (
+    <View style={{ flex: 5 }}>
+      <View style={styles.profile}>
+        <Image source={dog} style={styles.image} />
+        <View style={styles.data}>
+          <Text style={styles.text}>Mi Perfil</Text>
+          <Text style={styles.text}>Seguidores: 100</Text>
+          <Text style={styles.text}>Seguidos: 50</Text>
         </View>
-    )
-}
+      </View>
+      <DrawerContentScrollView {...props} style={styles.menu}>
+        <DrawerItemList {...props} />
+        <TouchableOpacity style={styles.logout}>
+          <Text>Cerrar Sesion</Text>
+        </TouchableOpacity>
+      </DrawerContentScrollView>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    profile: {
-        width: "100%",
-        height: 200,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center"
-    },
-    image: {
-        width: 100,
-        height: 100,
-        borderRadius: 50
-    },
-    data: {
-        display: "flex",
-        gap: 5,
-    },
-    text: {
-        fontSize: 18
-    },
-    menu: {
-        display: "flex",
-    }
+  profile: {
+    width: "100%",
+    height: 200,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  data: {
+    display: "flex",
+    gap: 5,
+  },
+  text: {
+    fontSize: 18,
+  },
+  menu: {
+    margin: 0,
+    padding: 0,
+    display: "flex",
+    flex: 1,
+  },
+  logout: {
+    marginLeft: 18,
+    marginTop: 18,
+    backgroundColor: "green",
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
 });
 
-export default CustomDrawer
+export default CustomDrawer;
