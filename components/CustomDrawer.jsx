@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     width: "100%",
     backgroundColor: "orange",
-    border: "2px solid orange",
     borderRadius: 20,
     color: "#fff",
   },

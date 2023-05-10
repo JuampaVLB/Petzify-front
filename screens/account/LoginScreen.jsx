@@ -14,6 +14,7 @@ import {
   ALERT_TYPE,
   Dialog,
   AlertNotificationRoot,
+  Toast,
 } from "react-native-alert-notification";
 import axios from "axios";
 
@@ -22,15 +23,6 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
-
-  const Success = () => {
-    Dialog.show({
-      type: ALERT_TYPE.SUCCESS,
-      title: "Success",
-      textBody: "Login Exitoso!",
-      button: "close",
-    });
-  };
 
   const Danger = (str) => {
     Dialog.show({
@@ -56,7 +48,6 @@ const LoginScreen = () => {
         // Alert.alert(
         //   `Login Exitoso! ${response.data.user.username} - ${response.data.user.email}`
         // );
-        Success();
         SaveToken(token);
       })
       .catch(function (error) {
@@ -75,14 +66,14 @@ const LoginScreen = () => {
       await AsyncStorage.setItem("TokenJWT", token);
       await navigation.navigate("Home");
     } catch (error) {
-      throw error;
+      throw Danger(error);
     }
   };
 
   return (
-    <AlertNotificationRoot>
+    <AlertNotificationRoot theme='dark'>
       <ImageBackground
-        source={require("../../assets/img/fondo1.jpeg")}
+        source={require("../../assets/img/login.jpeg")}
         style={styles.image}
       >
         <View style={styles.form}>

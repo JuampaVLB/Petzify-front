@@ -10,12 +10,35 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+} from "react-native-alert-notification";
 
 const RegisterScreen = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  const Success = () => {
+    Dialog.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: "Success",
+      textBody: "Registro Exitoso!",
+      button: "close",
+    });
+  };
+
+  const Danger = (str) => {
+    Dialog.show({
+      type: ALERT_TYPE.DANGER,
+      title: "Danger",
+      textBody: str,
+      button: "close",
+    });
+  };
 
   const handleSubmit = () => {
     axios({
@@ -29,57 +52,65 @@ const RegisterScreen = () => {
     })
       .then(function (response) {
         //  let token = response.headers.get("auth-token");
-        Alert.alert(
-          `Register Exitoso! ${response.data.user.username} - ${response.data.user.email}`
-        );
+        // Alert.alert(
+        //   `Register Exitoso! ${response.data.user.username} - ${response.data.user.email}`
+        // );
 
-        navigation.navigate("Home");
+        Success();
+
+        navigation.navigate("Login");
       })
       .catch(function (error) {
-        Alert.alert(error.response.data[0].message);
+        // Alert.alert(error.response.data[0].message);
+        Danger(error.response.data[0].message);
       });
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/img/fondo2.jpeg")}
-      style={styles.image}
-    >
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre de usuario"
-          defaultValue={username}
-          onChangeText={(newText) => setUsername(newText)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Correo electrónico"
-          defaultValue={email}
-          onChangeText={(newText) => setEmail(newText)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry={true}
-          defaultValue={password}
-          onChangeText={(newText) => setPassword(newText)}
-        />
-        <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
-          <Text style={styles.text}>Registrarse</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Text style={styles.link}>Ya tengo cuenta</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+    <AlertNotificationRoot>
+      <ImageBackground
+        source={require("../../assets/img/register.jpeg")}
+        style={styles.image}
+      >
+        <View style={styles.container}>
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre de usuario"
+            defaultValue={username}
+            onChangeText={(newText) => setUsername(newText)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Correo electrónico"
+            defaultValue={email}
+            onChangeText={(newText) => setEmail(newText)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry={true}
+            defaultValue={password}
+            onChangeText={(newText) => setPassword(newText)}
+          />
+          <TouchableOpacity
+            onPress={() => handleSubmit()}
+            style={styles.button}
+          >
+            <Text style={styles.text}>Registrarse</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.link}>Ya tengo cuenta</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </AlertNotificationRoot>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     width: "90%",
-    minHeight: "40%",
+    minHeight: "50%",
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
@@ -87,7 +118,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "gray",
     borderRadius: 5,
     padding: 10,
     margin: 10,
