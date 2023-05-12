@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image,TextInput } from 'react-native';
 
 const Profile = () => {
   return (
@@ -18,7 +18,13 @@ const Profile = () => {
           <Text>200</Text>
        </View>
        <View style={styles.informacion}>
+       <View style={styles.muro}>
          
+       </View>
+       <TextInput
+            style={styles.input}
+            placeholder="Responder..."
+          />
        </View>
     </View>
   )
@@ -29,7 +35,7 @@ const styles = StyleSheet.create({
     width: "100%",
     maxHeight: "100%",
     flex: 1,
-    resizeMode: "cover",
+    resizeMode: "cover", 
     justifyContent: "center",
     alignItems: "center",
   },
@@ -45,14 +51,33 @@ const styles = StyleSheet.create({
   informacion: {
     width: "100%",
     maxHeight: "55%",
-    backgroundColor: "#ccc",
     flex: 1,
     resizeMode: "cover",
-
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+    gap: 10,
+  },
+  muro: {
+    width: "80%",
+    maxHeight: "70%",
+    backgroundColor: "#fff",
+    flex: 1,
+    resizeMode: "cover",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 5,
+    padding: 10,
+    margin: 10,
+    width: "80%",
+    backgroundColor: "white",
+  },
 });
 
 export default Profile;

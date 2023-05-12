@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -48,7 +47,7 @@ function MyTabs() {
         name="AI"
         component={DogAIScreen}
         options={{
-          tabBarLabel: "Pet Recognition",
+          tabBarLabel: "IA",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
