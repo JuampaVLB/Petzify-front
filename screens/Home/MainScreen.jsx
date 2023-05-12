@@ -13,6 +13,7 @@ import {
   AlertNotificationRoot,
   Toast,
 } from "react-native-alert-notification";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 const MainScreen = () => {
   const navigation = useNavigation();
@@ -61,19 +62,19 @@ const MainScreen = () => {
     <AlertNotificationRoot theme="dark">
       <View style={styles.container}>
         <TouchableOpacity style={styles.post} onPress={toggleButtons}>
-          <Text style={{ color: "white", fontSize: 25 }}>+</Text>
+          <Ionicons name="add" size={48} color="white" />
         </TouchableOpacity>
         <Animated.View
           style={[styles.smallButtonsContainer, { opacity: buttonOpacity }]}
         >
           <TouchableOpacity style={styles.smallButton}>
-            <Text>+</Text>
+            <MaterialCommunityIcons name="pencil" size={24} color={"white"} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.smallButton}>
-            <Text>+</Text>
+            <MaterialCommunityIcons name="shopping" size={24} color={"white"} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.smallButton}>
-            <Text>+</Text>
+            <MaterialCommunityIcons name="dog" size={24} color={"white"} />
           </TouchableOpacity>
         </Animated.View>
       </View>

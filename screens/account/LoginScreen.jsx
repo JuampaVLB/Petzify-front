@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   form: {
+    marginTop: 100,
     width: "90%",
     minHeight: "40%",
     display: "flex",

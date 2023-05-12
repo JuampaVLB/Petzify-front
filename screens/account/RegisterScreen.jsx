@@ -55,29 +55,29 @@ const RegisterScreen = () => {
 
   const handleSubmit = () => {
     Alert.alert(value);
-    // axios({
-    //   method: "post",
-    //   url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/signup",
-    //   data: {
-    //     username,
-    //     email,
-    //     password,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     //  let token = response.headers.get("auth-token");
-    //     // Alert.alert(
-    //     //   `Register Exitoso! ${response.data.user.username} - ${response.data.user.email}`
-    //     // );
+    axios({
+      method: "post",
+      url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/signup",
+      data: {
+        username,
+        email,
+        password,
+      },
+    })
+      .then(function (response) {
+        //  let token = response.headers.get("auth-token");
+        // Alert.alert(
+        //   `Register Exitoso! ${response.data.user.username} - ${response.data.user.email}`
+        // );
 
-    //     Success();
+        Success();
 
-    //     navigation.navigate("Login");
-    //   })
-    //   .catch(function (error) {
-    //     // Alert.alert(error.response.data[0].message);
-    //     Danger(error.response.data[0].message);
-    //   });
+        navigation.navigate("Login");
+      })
+      .catch(function (error) {
+        // Alert.alert(error.response.data[0].message);
+        Danger(error.response.data[0].message);
+      });
   };
 
   return (
@@ -152,6 +152,7 @@ const RegisterScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 155,
     width: "90%",
     minHeight: "50%",
     display: "flex",
