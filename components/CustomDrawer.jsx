@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,11 +13,15 @@ import {
 } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 import dog from "../assets/img/dog.jpeg";
 
 const CustomDrawer = (props) => {
+  const [username, setUsername] = useState("NaN");
+  const [role, setRole] = useState("NaN");
   const navigation = useNavigation();
+
 
   const YesOrNo = () => {
     Alert.alert("CERRAR SESION", "No Podras Revertir Esto!", [
@@ -36,14 +40,50 @@ const CustomDrawer = (props) => {
     ]);
   };
 
+  const GetToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem("TokenJWT");
+
+      let headers = {
+        "Content-type": "application/json; charset=UTF-8",
+        "auth-token": value,
+      };
+
+      axios({
+        method: "get",
+        url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/profile",
+        headers: headers,
+      })
+        .then((res) => {
+          setUsername(res.data.user.username);
+
+          if(res.data.user.role === "user") setRole("Usuario");
+          if(res.data.user.role === "institution") setRole("Institucion");
+          if(res.data.user.role === "business") setRole("Negocio");
+          if(res.data.user.role === "admin") setRole("Administrador");
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+  useEffect(() => {
+    GetToken();
+  }, []);
+
   return (
     <View style={{ flex: 5 }}>
       <View style={styles.profile}>
         <Image source={dog} style={styles.image} />
         <View style={styles.data}>
-          <Text style={styles.text}>JuampaVLB</Text>
+          <Text style={styles.text}>{username}</Text>
           <Text style={styles.text}>Seguidores: 200</Text>
-          <Text style={styles.type}>Institucion</Text>
+          <Text style={styles.type}>{role}</Text>
         </View>
       </View>
       <DrawerContentScrollView {...props} style={styles.menu}>
@@ -64,7 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-  }, 
+  },
   image: {
     width: 100,
     height: 100,

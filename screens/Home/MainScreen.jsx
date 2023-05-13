@@ -7,30 +7,42 @@ import {
   Animated,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  ALERT_TYPE,
-  AlertNotificationRoot,
-  Toast,
-} from "react-native-alert-notification";
+// import {
+//   ALERT_TYPE,
+//   AlertNotificationRoot,
+//   Toast,
+// } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 const MainScreen = () => {
   const navigation = useNavigation();
-
+  const [username, setUsername] = useState("");
   const [showButtons, setShowButtons] = useState(false);
   const [buttonOpacity] = useState(new Animated.Value(0));
 
   const GetToken = async () => {
     try {
       const value = await AsyncStorage.getItem("TokenJWT");
-      console.log("el token es:" + value);
-      Toast.show({
-        type: ALERT_TYPE.SUCCESS,
-        title: "Success",
-        theme: "dark",
-        textBody: "Login Exitoso!",
-      });
+
+      let headers = {
+        "Content-type": "application/json; charset=UTF-8",
+        "auth-token": value,
+      };
+
+      axios({
+        method: "get",
+        url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/profile",
+        headers: headers,
+      })
+        .then((res) => {
+          setUsername(res.data.user.username);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
       if (!value) {
         navigation.navigate("Login");
       } else {
@@ -59,26 +71,26 @@ const MainScreen = () => {
   }, []);
 
   return (
-    <AlertNotificationRoot theme="dark">
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.post} onPress={toggleButtons}>
-          <Ionicons name="add" size={48} color="white" />
+    // <AlertNotificationRoot theme="dark">
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.post} onPress={toggleButtons}>
+        <Ionicons name="add" size={48} color="white" />
+      </TouchableOpacity>
+      <Animated.View
+        style={[styles.smallButtonsContainer, { opacity: buttonOpacity }]}
+      >
+        <TouchableOpacity style={styles.smallButton}>
+          <MaterialCommunityIcons name="pencil" size={24} color={"white"} />
         </TouchableOpacity>
-        <Animated.View
-          style={[styles.smallButtonsContainer, { opacity: buttonOpacity }]}
-        >
-          <TouchableOpacity style={styles.smallButton}>
-            <MaterialCommunityIcons name="pencil" size={24} color={"white"} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton}>
-            <MaterialCommunityIcons name="shopping" size={24} color={"white"} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton}>
-            <MaterialCommunityIcons name="dog" size={24} color={"white"} />
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    </AlertNotificationRoot>
+        <TouchableOpacity style={styles.smallButton}>
+          <MaterialCommunityIcons name="shopping" size={24} color={"white"} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.smallButton}>
+          <MaterialCommunityIcons name="dog" size={24} color={"white"} />
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
+    // </AlertNotificationRoot>
   );
 };
 
