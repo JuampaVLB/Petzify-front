@@ -9,7 +9,7 @@ const Profile = () => {
           <Image
           style={{ width: 100, height: 100, marginBottom: 15, borderTopLeftRadius: 100,
             borderTopRightRadius: 100, borderBottomLeftRadius: 100, borderBottomRightRadius: 100,}}
-          source={require("../../assets/img/dog.jpeg")}
+          source={require("../../../assets/img/dog.jpeg")}
         />
           </View>
           <Text>Seguidores:</Text>

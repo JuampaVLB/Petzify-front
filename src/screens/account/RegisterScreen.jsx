@@ -83,7 +83,7 @@ const RegisterScreen = () => {
   return (
     <AlertNotificationRoot>
       <ImageBackground
-        source={require("../../assets/img/register.jpeg")}
+        source={require("../../../assets/img/register.jpeg")}
         style={styles.image}
       >
         <View style={styles.container}>

@@ -72,7 +72,7 @@ const LoginScreen = () => {
   return (
     <AlertNotificationRoot theme='dark'>
       <ImageBackground
-        source={require("../../assets/img/login.jpeg")}
+        source={require("../../../assets/img/login.jpeg")}
         style={styles.image}
       >
         <View style={styles.form}>

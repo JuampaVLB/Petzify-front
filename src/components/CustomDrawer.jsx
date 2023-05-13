@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
-import dog from "../assets/img/dog.jpeg";
+import dog from "../../assets/img/dog.jpeg";
 
 const CustomDrawer = (props) => {
   const [username, setUsername] = useState("NaN");
