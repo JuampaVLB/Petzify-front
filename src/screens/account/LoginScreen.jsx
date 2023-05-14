@@ -15,7 +15,7 @@ import {
   Dialog,
   AlertNotificationRoot,
 } from "react-native-alert-notification";
-import axios from "axios";
+import { authApi } from "../../api/auth";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -33,20 +33,15 @@ const LoginScreen = () => {
   };
 
   const handleSubmit = () => {
-    axios({
-      method: "post",
-      url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/signin",
-      data: {
+
+    authApi
+      .post("/signin", {
         username,
         password,
-      },
-    })
+      })
       .then(async function (response) {
         let token = response.headers.get("auth-token");
 
-        // Alert.alert(
-        //   `Login Exitoso! ${response.data.user.username} - ${response.data.user.email}`
-        // );
         SaveToken(token);
       })
       .catch(function (error) {
@@ -70,7 +65,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <AlertNotificationRoot theme='dark'>
+    <AlertNotificationRoot theme="dark">
       <ImageBackground
         source={require("../../../assets/img/login.jpeg")}
         style={styles.image}

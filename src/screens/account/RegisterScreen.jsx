@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { authApi } from "../../api/auth";
 import {
   View,
   TextInput,
@@ -22,11 +22,11 @@ import { Alert } from "react-native";
 const data = [
   { label: "Usuario", value: "user" },
   { label: "Negocio", value: "business" },
-  { label: "Institucion", value: "institution" }
+  { label: "Institucion", value: "institution" },
 ];
 
 const RegisterScreen = () => {
-  const [value, setValue] = useState(null);
+  const [role, setRole] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const [username, setUsername] = useState("");
@@ -54,22 +54,15 @@ const RegisterScreen = () => {
   };
 
   const handleSubmit = () => {
-    Alert.alert(value);
-    axios({
-      method: "post",
-      url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/signup",
-      data: {
+    
+    authApi
+      .post("/signup", {
         username,
-        email,
         password,
-      },
-    })
+        email,
+        role
+      })
       .then(function (response) {
-        //  let token = response.headers.get("auth-token");
-        // Alert.alert(
-        //   `Register Exitoso! ${response.data.user.username} - ${response.data.user.email}`
-        // );
-
         Success();
 
         navigation.navigate("Login");
@@ -106,35 +99,35 @@ const RegisterScreen = () => {
             defaultValue={password}
             onChangeText={(newText) => setPassword(newText)}
           />
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? "Select item" : "..."}
-              searchPlaceholder="Search..."
-              value={value}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setValue(item.value);
-                setIsFocus(false);
-              }}
-              renderLeftIcon={() => (
-                <AntDesign
-                  style={styles.icon}
-                  color={isFocus ? "blue" : "black"}
-                  name="Safety"
-                  size={20}
-                />
-              )}
-            />
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select item" : "..."}
+            searchPlaceholder="Search..."
+            value={role}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setRole(item.value);
+              setIsFocus(false);
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? "blue" : "black"}
+                name="Safety"
+                size={20}
+              />
+            )}
+          />
           <TouchableOpacity
             onPress={() => handleSubmit()}
             style={styles.button}

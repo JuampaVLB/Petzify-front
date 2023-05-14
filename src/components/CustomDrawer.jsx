@@ -17,10 +17,13 @@ import axios from "axios";
 
 import dog from "../../assets/img/dog.jpeg";
 
+import { authApi } from "../api/auth";
+
 const CustomDrawer = (props) => {
   const [username, setUsername] = useState("NaN");
   const [role, setRole] = useState("NaN");
   const navigation = useNavigation();
+
 
 
   const YesOrNo = () => {
@@ -48,15 +51,12 @@ const CustomDrawer = (props) => {
         "Content-type": "application/json; charset=UTF-8",
         "auth-token": value,
       };
-
-      axios({
-        method: "get",
-        url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/profile",
-        headers: headers,
+      
+      authApi.get("/profile", {
+        headers: headers
       })
-        .then((res) => {
+      .then((res) => {
           setUsername(res.data.user.username);
-
           if(res.data.user.role === "user") setRole("Usuario");
           if(res.data.user.role === "institution") setRole("Institucion");
           if(res.data.user.role === "business") setRole("Negocio");
