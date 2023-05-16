@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
+  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import {
 //   ALERT_TYPE,
@@ -15,6 +15,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //   Toast,
 // } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+
+import { authApi } from "../../api/auth";
 
 const MainScreen = () => {
   const navigation = useNavigation();
@@ -31,24 +33,20 @@ const MainScreen = () => {
         "auth-token": value,
       };
 
-      axios({
-        method: "get",
-        url: "https://pet-tracker-backend-production.up.railway.app/api/v1/auth/profile",
-        headers: headers,
-      })
+      authApi
+        .get("/profile", {
+          headers,
+        })
         .then((res) => {
-          setUsername(res.data.user.username);
+          // setUsername(res.data.user.username);
+          // navigation.navigate("Home");
         })
         .catch((error) => {
           console.log(error);
+          navigation.navigate("Login");
         });
-
-      if (!value) {
-        navigation.navigate("Login");
-      } else {
-        navigation.navigate("Home");
-      }
     } catch (error) {
+      navigation.navigate("Login");
       throw error;
     }
   };
@@ -70,6 +68,8 @@ const MainScreen = () => {
     GetToken();
   }, []);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     // <AlertNotificationRoot theme="dark">
     <View style={styles.container}>
@@ -85,10 +85,36 @@ const MainScreen = () => {
         <TouchableOpacity style={styles.smallButton}>
           <MaterialCommunityIcons name="shopping" size={24} color={"white"} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.smallButton}>
+        <TouchableOpacity
+          style={styles.smallButton}
+          onPress={() => setModalVisible(true)}
+        >
           <MaterialCommunityIcons name="dog" size={24} color={"white"} />
         </TouchableOpacity>
       </Animated.View>
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Hello World!</Text>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </View>
     // </AlertNotificationRoot>
   );
@@ -133,6 +159,50 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    backgroundColor: "red",
+    width: "90%",
+    height: "80%",
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
 

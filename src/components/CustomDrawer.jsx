@@ -13,18 +13,15 @@ import {
 } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 
 import dog from "../../assets/img/dog.jpeg";
 
 import { authApi } from "../api/auth";
 
 const CustomDrawer = (props) => {
-  const [username, setUsername] = useState("NaN");
+  const [data, setData] = useState({});
   const [role, setRole] = useState("NaN");
   const navigation = useNavigation();
-
-
 
   const YesOrNo = () => {
     Alert.alert("CERRAR SESION", "No Podras Revertir Esto!", [
@@ -51,17 +48,17 @@ const CustomDrawer = (props) => {
         "Content-type": "application/json; charset=UTF-8",
         "auth-token": value,
       };
-      
-      authApi.get("/profile", {
-        headers: headers
-      })
-      .then((res) => {
-          setUsername(res.data.user.username);
-          if(res.data.user.role === "user") setRole("Usuario");
-          if(res.data.user.role === "institution") setRole("Institucion");
-          if(res.data.user.role === "business") setRole("Negocio");
-          if(res.data.user.role === "admin") setRole("Administrador");
 
+      authApi
+        .get("/profile", {
+          headers: headers,
+        })
+        .then((res) => {
+          setData(res.data.user);
+          if (res.data.user.role === "user") setRole("Usuario");
+          if (res.data.user.role === "institution") setRole("Institucion");
+          if (res.data.user.role === "business") setRole("Negocio");
+          if (res.data.user.role === "admin") setRole("Administrador");
         })
         .catch((error) => {
           console.log(error);
@@ -70,7 +67,6 @@ const CustomDrawer = (props) => {
       throw error;
     }
   };
-
 
   useEffect(() => {
     GetToken();
@@ -81,7 +77,7 @@ const CustomDrawer = (props) => {
       <View style={styles.profile}>
         <Image source={dog} style={styles.image} />
         <View style={styles.data}>
-          <Text style={styles.text}>{username}</Text>
+          <Text style={styles.text}>{data.username}</Text>
           <Text style={styles.text}>Seguidores: 200</Text>
           <Text style={styles.type}>{role}</Text>
         </View>
