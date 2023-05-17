@@ -17,7 +17,6 @@ import {
 } from "react-native-alert-notification";
 import { authApi } from "../../api/auth";
 
-
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -63,20 +62,12 @@ const LoginScreen = () => {
     }
   };
 
-  // useEffect(async () => {
-  //   
-
-  //   
-
-  // }, []);
-
-  useEffect(() => {
-    const result = AsyncStorage.getItem("TokenJWT");
-    if(result !== undefined) {
-      navigation.navigate("Home");
-     }
-  });
-
+  // useEffect(() => {
+  //   const result = AsyncStorage.getItem("TokenJWT");
+  //   if (result !== undefined) {
+  //     navigation.navigate("Home");
+  //   }
+  // });
 
   return (
     <AlertNotificationRoot theme="dark">
