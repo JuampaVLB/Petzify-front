@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   View,
@@ -17,6 +17,7 @@ import {
 } from "react-native-alert-notification";
 import { authApi } from "../../api/auth";
 
+
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +34,6 @@ const LoginScreen = () => {
   };
 
   const handleSubmit = () => {
-
     authApi
       .post("/signin", {
         username,
@@ -42,20 +42,19 @@ const LoginScreen = () => {
       .then(async function (response) {
         let token = response.headers.get("auth-token");
 
-        SaveToken(token);
+        saveToken(token);
       })
       .catch(function (error) {
         if (error.response.data.length >= 1) {
           //Alert.alert(error.response.data[0].message);
           Danger(error.response.data[0].message);
         } else {
-          //Alert.alert(error.response.data.message);
           Danger(error.response.data.message);
         }
       });
   };
 
-  const SaveToken = async (token) => {
+  const saveToken = async (token) => {
     try {
       await AsyncStorage.setItem("TokenJWT", token);
       await navigation.navigate("Home");
@@ -63,6 +62,21 @@ const LoginScreen = () => {
       throw Danger(error);
     }
   };
+
+  // useEffect(async () => {
+  //   
+
+  //   
+
+  // }, []);
+
+  useEffect(() => {
+    const result = AsyncStorage.getItem("TokenJWT");
+    if(result !== undefined) {
+      navigation.navigate("Home");
+     }
+  });
+
 
   return (
     <AlertNotificationRoot theme="dark">

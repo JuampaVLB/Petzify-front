@@ -16,8 +16,7 @@ import {
 } from "react-native-alert-notification";
 
 import { Dropdown } from "react-native-element-dropdown";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { Alert } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const data = [
   { label: "Usuario", value: "user" },
@@ -54,13 +53,12 @@ const RegisterScreen = () => {
   };
 
   const handleSubmit = () => {
-    
     authApi
       .post("/signup", {
         username,
         password,
         email,
-        role
+        role,
       })
       .then(function (response) {
         Success();
@@ -110,8 +108,8 @@ const RegisterScreen = () => {
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? "Select item" : "..."}
-            searchPlaceholder="Search..."
+            placeholder={!isFocus ? "Tipo De Cuenta" : "Seleccionando..."}
+            searchPlaceholder="Buscar..."
             value={role}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -120,12 +118,7 @@ const RegisterScreen = () => {
               setIsFocus(false);
             }}
             renderLeftIcon={() => (
-              <AntDesign
-                style={styles.icon}
-                color={isFocus ? "blue" : "black"}
-                name="Safety"
-                size={20}
-              />
+              <MaterialCommunityIcons name="account-arrow-down" size={24} color="green" />
             )}
           />
           <TouchableOpacity
@@ -194,17 +187,18 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 50,
     width: "80%",
-    borderColor: "gray",
+    borderColor: "black",
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
+    backgroundColor: "white",
   },
   icon: {
     marginRight: 5,
+    color: "green",
   },
   label: {
     position: "absolute",
-    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,
@@ -222,8 +216,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    display: "none",
   },
 });
 

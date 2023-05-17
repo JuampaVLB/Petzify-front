@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import MapView from 'react-native-maps';
-import { StatusBar } from 'expo-status-bar';
 
 const MapScreen = () => {
   
