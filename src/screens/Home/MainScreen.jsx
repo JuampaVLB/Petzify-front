@@ -80,15 +80,17 @@ const MainScreen = () => {
         style={[styles.smallButtonsContainer, { opacity: buttonOpacity }]}
       >
         <TouchableOpacity style={styles.smallButton}>
-          <MaterialCommunityIcons name="pencil" size={24} color={"white"} />
+          <MaterialCommunityIcons
+            name="pencil"
+            size={24}
+            color={"white"}
+            onPress={() => setModalVisible(true)}
+          />
         </TouchableOpacity>
         <TouchableOpacity style={styles.smallButton}>
           <MaterialCommunityIcons name="shopping" size={24} color={"white"} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.smallButton}
-          onPress={() => setModalVisible(true)}
-        >
+        <TouchableOpacity style={styles.smallButton}>
           <MaterialCommunityIcons name="dog" size={24} color={"white"} />
         </TouchableOpacity>
       </Animated.View>
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: "orange",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -180,9 +182,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    backgroundColor: "white",
     width: "90%",
-    height: "100%",
+    height: "85%",
   },
   button: {
     borderRadius: 20,

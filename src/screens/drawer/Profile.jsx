@@ -8,6 +8,11 @@ import {
   ProgressBarAndroid,
 } from "react-native";
 
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Foundation } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+
 const Profile = () => {
   return (
     <View style={styles.container}>
@@ -41,46 +46,16 @@ const Profile = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Image
-                style={{
-                  width: 48,
-                  height: 48,
-                  marginBottom: 15,
-                  borderTopLeftRadius: 100,
-                  borderTopRightRadius: 100,
-                  borderBottomLeftRadius: 100,
-                  borderBottomRightRadius: 100,
-                }}
-                source={require("../../../assets/img/dog.jpeg")}
-              />
-              <Image
-                style={{
-                  width: 48,
-                  height: 48,
-                  marginBottom: 15,
-                  borderTopLeftRadius: 100,
-                  borderTopRightRadius: 100,
-                  borderBottomLeftRadius: 100,
-                  borderBottomRightRadius: 100,
-                }}
-                source={require("../../../assets/img/dog.jpeg")}
-              />
-              <Image
-                style={{
-                  width: 48,
-                  height: 48,
-                  marginBottom: 15,
-                  borderTopLeftRadius: 100,
-                  borderTopRightRadius: 100,
-                  borderBottomLeftRadius: 100,
-                  borderBottomRightRadius: 100,
-                }}
-                source={require("../../../assets/img/dog.jpeg")}
-              />
+              <Entypo name="instagram-with-circle" size={48} color="green" />
+              <Entypo name="twitter-with-circle" size={48} color="green" />
+              <Entypo name="youtube-with-circle" size={48} color="green" />
             </View>
+          </View>
+          <View>
             <Text>Nivel 1</Text>
             <ProgressBarAndroid
               styleAttr="Horizontal"
+              color="green"
               indeterminate={false}
               progress={0.6}
             />
@@ -88,80 +63,22 @@ const Profile = () => {
         </View>
         <View style={styles.right}>
           <View style={styles.subright1}>
-            <Image
-              style={{
-                width: 48,
-                height: 48,
-                marginBottom: 15,
-                borderTopLeftRadius: 100,
-                borderTopRightRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-              }}
-              source={require("../../../assets/favicon.png")}
+            <SimpleLineIcons name="badge" size={38} color="orange" />
+            <MaterialCommunityIcons
+              name="police-badge-outline"
+              size={38}
+              color="orange"
             />
-            <Image
-              style={{
-                width: 48,
-                height: 48,
-                marginBottom: 15,
-                borderTopLeftRadius: 100,
-                borderTopRightRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-              }}
-              source={require("../../../assets/favicon.png")}
-            />
-            <Image
-              style={{
-                width: 48,
-                height: 48,
-                marginBottom: 15,
-                borderTopLeftRadius: 100,
-                borderTopRightRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-              }}
-              source={require("../../../assets/favicon.png")}
-            />
+            <Foundation name="sheriff-badge" size={38} color="orange" />
           </View>
           <View style={styles.subright2}>
-            <Image
-              style={{
-                width: 48,
-                height: 48,
-                marginBottom: 15,
-                borderTopLeftRadius: 100,
-                borderTopRightRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-              }}
-              source={require("../../../assets/favicon.png")}
+            <SimpleLineIcons name="badge" size={38} color="orange" />
+            <MaterialCommunityIcons
+              name="police-badge-outline"
+              size={38}
+              color="orange"
             />
-            <Image
-              style={{
-                width: 48,
-                height: 48,
-                marginBottom: 15,
-                borderTopLeftRadius: 100,
-                borderTopRightRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-              }}
-              source={require("../../../assets/favicon.png")}
-            />
-            <Image
-              style={{
-                width: 48,
-                height: 48,
-                marginBottom: 15,
-                borderTopLeftRadius: 100,
-                borderTopRightRadius: 100,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-              }}
-              source={require("../../../assets/favicon.png")}
-            />
+            <Foundation name="sheriff-badge" size={38} color="orange" />
           </View>
         </View>
       </View>
@@ -179,7 +96,7 @@ const styles = StyleSheet.create({
     maxHeight: "100%",
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   seguidores: {
@@ -202,7 +119,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 10,
-    justifyContent: "space-between",
     alignItems: "center",
   },
   follows: {
@@ -221,13 +137,15 @@ const styles = StyleSheet.create({
   },
   subright1: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    alignItems: "center",
     gap: 15,
   },
   subright2: {
     display: "flex",
     gap: 15,
-    justifyContent: "center",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   informacion: {
     width: "100%",
@@ -239,6 +157,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     backgroundColor: "gray",
+    display: "none",
   },
   muro: {
     width: "80%",

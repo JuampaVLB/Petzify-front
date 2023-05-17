@@ -62,13 +62,6 @@ const LoginScreen = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const result = AsyncStorage.getItem("TokenJWT");
-  //   if (result !== undefined) {
-  //     navigation.navigate("Home");
-  //   }
-  // });
-
   return (
     <AlertNotificationRoot theme="dark">
       <ImageBackground
