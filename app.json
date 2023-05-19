@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "canini-front",
-    "slug": "canini-front",
+    "name": "Petzify",
+    "slug": "Petzify",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.juampavlb.caninifront",
+      "package": "com.juampavlb.Petzify",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBKuL53hpQ8NRko_4VUvtiO2Lz4XQJh2EA"
@@ -34,7 +34,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "eb329177-4989-4441-83f9-9d7b44670067"
+        "projectId": "86794930-b43a-4e3a-850e-a646337703b9"
       }
     }
   }
