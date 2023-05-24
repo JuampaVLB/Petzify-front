@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Animated,
   Modal,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,10 +18,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import { authApi } from "../../api/auth";
+import Post from "../../components/Post";
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
   const [showButtons, setShowButtons] = useState(false);
   const [buttonOpacity] = useState(new Animated.Value(0));
 
@@ -72,20 +73,33 @@ const MainScreen = () => {
 
   return (
     // <AlertNotificationRoot theme="dark">
+
     <View style={styles.container}>
+      <ScrollView style={styles.scroll}>
+        <Post 
+        imageURL="run"
+        title="Titulo re copado"
+        />
+        <Post 
+        title="Perro re fachero"
+        imageURL="run"
+        />
+        <Post 
+        title="😂😊🤣❤😍👌"
+        imageURL="run"/>
+      </ScrollView>
+
       <TouchableOpacity style={styles.post} onPress={toggleButtons}>
         <Ionicons name="add" size={48} color="white" />
       </TouchableOpacity>
       <Animated.View
         style={[styles.smallButtonsContainer, { opacity: buttonOpacity }]}
       >
-        <TouchableOpacity style={styles.smallButton}>
-          <MaterialCommunityIcons
-            name="pencil"
-            size={24}
-            color={"white"}
-            onPress={() => setModalVisible(true)}
-          />
+        <TouchableOpacity
+          style={styles.smallButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <MaterialCommunityIcons name="pencil" size={24} color={"white"} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.smallButton}>
           <MaterialCommunityIcons name="shopping" size={24} color={"white"} />
@@ -118,6 +132,7 @@ const MainScreen = () => {
         </Modal>
       </View>
     </View>
+
     // </AlertNotificationRoot>
   );
 };
@@ -125,19 +140,19 @@ const MainScreen = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "100%",
-    backgroundColor: "#ccc",
+    minHeight: "100%",
+  },
+  scroll: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: "center",
+    minHeight: "100%",
+    marginTop: -15,
   },
   post: {
     width: 70,
     minHeight: 70,
     backgroundColor: "green",
     position: "absolute",
-    bottom: 40,
+    bottom: 100,
     right: 20,
     display: "flex",
     justifyContent: "center",
@@ -146,7 +161,7 @@ const styles = StyleSheet.create({
   },
   smallButtonsContainer: {
     position: "absolute",
-    bottom: 140,
+    bottom: 200,
     right: 30,
     display: "flex",
     flexDirection: "column",
