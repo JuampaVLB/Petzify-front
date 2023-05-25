@@ -6,6 +6,7 @@ import {
   Image,
   SafeAreaView,
   TextInput,
+  Dimensions,
 } from "react-native";
 
 import profile from "../../assets/img/dog.jpeg";
@@ -17,8 +18,10 @@ import { FontAwesome } from "@expo/vector-icons";
 
 export default function Post(props) {
   
+  console.log(props.index);
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.index === 2 ? styles.lastPost : null]}>
       <View style={styles.top}>
         <View style={styles.info}>
           <View
@@ -98,8 +101,7 @@ export default function Post(props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 15,
-    height: "30%",
+    height: Dimensions.get("window").height - 104,
     width: "100%",
   },
   top: {
@@ -141,4 +143,7 @@ const styles = StyleSheet.create({
   comment: {
     marginTop: 15,
   },
+  lastPost: {
+    marginBottom: 55,
+  }
 });

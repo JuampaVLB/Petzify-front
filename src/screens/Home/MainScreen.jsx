@@ -71,12 +71,22 @@ const MainScreen = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const postCount = 3;
+
   return (
     // <AlertNotificationRoot theme="dark">
 
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
-        <Post 
+        {[...Array(postCount)].map((_, index) => (
+          <Post
+            key={index}
+            imageURL="run"
+            title="Titulo re copado"
+            index={index}
+          />
+        ))}
+        {/* <Post 
         imageURL="run"
         title="Titulo re copado"
         />
@@ -86,7 +96,7 @@ const MainScreen = () => {
         />
         <Post 
         title="😂😊🤣❤😍👌"
-        imageURL="run"/>
+        imageURL="run"/> */}
       </ScrollView>
 
       <TouchableOpacity style={styles.post} onPress={toggleButtons}>
@@ -145,7 +155,6 @@ const styles = StyleSheet.create({
   scroll: {
     flex: 1,
     minHeight: "100%",
-    marginTop: -15,
   },
   post: {
     width: 70,
@@ -220,6 +229,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
+  lastPost: {
+    backgroundColor: "red",
+  }
 });
 
 export default MainScreen;
