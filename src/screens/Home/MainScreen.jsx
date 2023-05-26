@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Animated,
   Modal,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +17,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //   Toast,
 // } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+
+import { ScrollView as GestureScrollView } from "react-native-gesture-handler";
 
 import { authApi } from "../../api/auth";
 import Post from "../../components/Post";
@@ -73,11 +76,18 @@ const MainScreen = () => {
 
   const postCount = 3;
 
+  const scrollViewRef = useRef(null);
+
   return (
     // <AlertNotificationRoot theme="dark">
 
     <View style={styles.container}>
-      <ScrollView style={styles.scroll}>
+      <ScrollView
+        style={styles.scroll}
+        ref={scrollViewRef}
+        snapToInterval={680}
+        decelerationRate="fast"
+      >
         {[...Array(postCount)].map((_, index) => (
           <Post
             key={index}
@@ -86,19 +96,7 @@ const MainScreen = () => {
             index={index}
           />
         ))}
-        {/* <Post 
-        imageURL="run"
-        title="Titulo re copado"
-        />
-        <Post 
-        title="Perro re fachero"
-        imageURL="run"
-        />
-        <Post 
-        title="😂😊🤣❤😍👌"
-        imageURL="run"/> */}
       </ScrollView>
-
       <TouchableOpacity style={styles.post} onPress={toggleButtons}>
         <Ionicons name="add" size={48} color="white" />
       </TouchableOpacity>
@@ -229,9 +227,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  lastPost: {
-    backgroundColor: "red",
-  }
 });
 
 export default MainScreen;

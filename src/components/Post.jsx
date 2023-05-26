@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  SafeAreaView,
   TextInput,
   Dimensions,
 } from "react-native";
