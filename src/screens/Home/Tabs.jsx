@@ -3,7 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import DrawerMenu from '../../nav/DrawerMenu';
+import DrawerMenu from "../../nav/DrawerMenu";
 import DogAIScreen from "./DogAIScreen";
 import MapScreen from "./MapScreen";
 
@@ -15,6 +15,9 @@ function MyTabs() {
       initialRouteName="Main"
       screenOptions={{
         tabBarActiveTintColor: "green",
+        tabBarStyle: {
+          height: 50,
+        },
       }}
     >
       <Tab.Screen

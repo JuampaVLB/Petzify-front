@@ -18,8 +18,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
-import { ScrollView as GestureScrollView } from "react-native-gesture-handler";
-
 import { authApi } from "../../api/auth";
 import Post from "../../components/Post";
 
@@ -78,6 +76,10 @@ const MainScreen = () => {
 
   const scrollViewRef = useRef(null);
 
+  const { height } = Dimensions.get('window');
+
+  console.log(height - 50 - 60);
+
   return (
     // <AlertNotificationRoot theme="dark">
 
@@ -85,7 +87,7 @@ const MainScreen = () => {
       <ScrollView
         style={styles.scroll}
         ref={scrollViewRef}
-        snapToInterval={680}
+        snapToInterval={(height - 50 - 60)}
         decelerationRate="fast"
       >
         {[...Array(postCount)].map((_, index) => (
