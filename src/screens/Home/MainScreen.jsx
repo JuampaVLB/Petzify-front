@@ -17,9 +17,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //   Toast,
 // } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-
+import io from "socket.io-client";
 import { authApi } from "../../api/auth";
 import Post from "../../components/Post";
+import ModalPost from "../../components/ModalPost";
 
 const MainScreen = () => {
   const navigation = useNavigation();
@@ -67,7 +68,24 @@ const MainScreen = () => {
   };
 
   useEffect(() => {
+
     GetToken();
+
+    const socket = io("http://192.168.0.2:5000");
+
+    socket.on("connect", () => {
+      console.log("Conectado desde client");
+    });
+
+    socket.emit("mensaje", "Hola, servidor!");
+
+    // socket.on("mensaje", (data) => {
+    //   console.log("Mensaje recibido del servidor:", data);
+    // });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -76,7 +94,7 @@ const MainScreen = () => {
 
   const scrollViewRef = useRef(null);
 
-  const { height } = Dimensions.get('window');
+  const { height } = Dimensions.get("window");
 
   console.log(height - 50 - 60);
 
@@ -87,7 +105,7 @@ const MainScreen = () => {
       <ScrollView
         style={styles.scroll}
         ref={scrollViewRef}
-        snapToInterval={(height - 50 - 60)}
+        snapToInterval={height - 50 - 60}
         decelerationRate="fast"
       >
         {[...Array(postCount)].map((_, index) => (
@@ -119,27 +137,7 @@ const MainScreen = () => {
         </TouchableOpacity>
       </Animated.View>
       <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+          <ModalPost estado={modalVisible} setEstado={setModalVisible} />
       </View>
     </View>
 
@@ -185,49 +183,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "orange",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: "90%",
-    height: "85%",
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
   },
 });
 
