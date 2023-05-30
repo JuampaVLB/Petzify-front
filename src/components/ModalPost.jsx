@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Image,
+} from "react-native";
 
 import profile from "../../assets/img/dog.jpeg";
-import dog from "../../assets/img/run.webp";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 
 export default function Post({ estado, setEstado }) {
   const handleCloseModal = () => {
     setEstado(false);
   };
+
+  const [desc, setdesc] = useState("");
+  const [title, setTitle] = useState("");
+
 
   return (
     <Modal
@@ -22,9 +29,50 @@ export default function Post({ estado, setEstado }) {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Hello World!</Text>
-          <TouchableOpacity title="Cerrar modal" onPress={handleCloseModal}>
-            <Text>Hide Modal</Text>
+          <View style={styles.account_info}>
+            <Image source={profile} style={styles.imageProfile} />
+            <Text>@Petzify-App</Text>
+          </View>
+          <View>
+            <Text aria-label="Label for Title" nativeID="titulo">
+              Titulo
+            </Text>
+            <TextInput
+              aria-label="input"
+              aria-labelledby="titulo"
+              style={styles.input_title}
+              defaultValue={title}
+              onChangeText={(newText) => setTitle(newText)}
+            />
+          </View>
+          <View>
+            <Text aria-label="Label for Desc" nativeID="descripcion">
+              Descripcion
+            </Text>
+            <TextInput
+              aria-label="input"
+              aria-labelledby="descripcion"
+              style={styles.input_desc} 
+              defaultValue={desc}
+              onChangeText={(newText) => setDesc(newText)}
+            />
+          </View>
+          <TouchableOpacity style={styles.btn_img}>
+            <Text style={{ color: "white" }}>Agregar Imagen</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            title="Cerrar modal"
+            onPress={handleCloseModal}
+            style={styles.btn_hide}
+          >
+            <Text style={{ color: "white" }}>Postear</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            title="Cerrar modal"
+            onPress={handleCloseModal}
+            style={styles.btn_hide}
+          >
+            <Text style={{ color: "white" }}>Cerrar Formulario</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -37,13 +85,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+  },
+  imageProfile: {
+    width: 38,
+    height: 38,
+    borderRadius: 50,
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "orange",
+    display: "flex",
+    justifyContent: "space-around",
+    backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -56,24 +108,54 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "85%",
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+  account_info: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10,
+    width: "85%",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+    borderColor: "black",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  input_title: {
+    width: 300,
+    height: 50,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
+    paddingLeft: 10,
+  },
+  input_desc: {
+    width: 300,
+    height: 200,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
+    paddingLeft: 10,
+  },
+  btn_img: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 300,
+    height: 40,
+    backgroundColor: "green",
+    borderRadius: 10,
+  },
+  btn_hide: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 300,
+    height: 40,
+    backgroundColor: "orange",
+    borderRadius: 10,
   },
 });
