@@ -16,11 +16,8 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function Post(props) {
-  
-  console.log(props.index);
-
   return (
-    <View style={[styles.container, props.index === 2 ? styles.lastPost : null]}>
+    <View style={[styles.container, props.index === true ? styles.lastPost : null]}>
       <View style={styles.top}>
         <View style={styles.info}>
           <View

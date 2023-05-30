@@ -121,20 +121,13 @@ const MainScreen = () => {
         snapToInterval={height - 50 - 60}
         decelerationRate="fast"
       >
-        {/* {[...Array(postCount)].map((_, index) => (
+        {posts.map((post, index) => (
           <Post
-            key={index}
-            imageURL="run"
-            title="Titulo re copado"
-            index={index}
-          />
-        ))} */}
-        {posts.map((post) => (
-          <Post
-          key={post.id}
+          key={post._id}
           imageURL="run"
           title={post.title}
           desc={post.desc}
+          index={posts.length === (index+1) ? true : false}
           />
         ))}
       </ScrollView>

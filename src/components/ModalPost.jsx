@@ -40,9 +40,6 @@ export default function Post({ estado, setEstado }) {
       })
   };
 
-
-  
-
   return (
     <Modal
       animationType="slide"
