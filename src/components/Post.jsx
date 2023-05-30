@@ -29,7 +29,7 @@ export default function Post(props) {
             }}
           >
             <Image source={profile} style={styles.imageProfile} />
-            <Text style={styles.text}>@Petzify-App</Text>
+            <Text style={styles.text}>{props.username}</Text>
           </View>
           <Entypo name="dots-three-vertical" size={24} color="black" />
         </View>
@@ -80,8 +80,8 @@ export default function Post(props) {
               alignItems: "center",
             }}
           >
-            <Image source={profile} style={styles.imageProfile} />
-            <Text style={styles.text}>@Petzify-App</Text>
+            <Image source={dog} style={styles.imageProfile} />
+            <Text style={styles.text}>@Yo</Text>
           </View>
           <TextInput
             style={{ marginTop: 10, marginLeft: 45 }}

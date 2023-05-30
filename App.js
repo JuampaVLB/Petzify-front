@@ -1,12 +1,15 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 // Components
 import { NavigationContainer } from "@react-navigation/native";
-import Navigation from './src/nav/Navigation';
+import { UserProvider } from "./src/UserContext";
+import Navigation from "./src/nav/Navigation";
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Navigation />
+      <UserProvider>
+        <Navigation />
+      </UserProvider>
     </NavigationContainer>
   );
 }

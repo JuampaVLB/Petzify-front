@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
+import { UserContext } from '../UserContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
@@ -19,6 +20,9 @@ import dog from "../../assets/img/dog.jpeg";
 import { authApi } from "../api/auth";
 
 const CustomDrawer = (props) => {
+
+  const { setUserData } = useContext(UserContext);
+
   const [data, setData] = useState({});
   const [role, setRole] = useState("NaN");
   const navigation = useNavigation();

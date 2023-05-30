@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
-  Modal,
   ScrollView,
   Dimensions,
 } from "react-native";
@@ -27,6 +26,7 @@ const MainScreen = () => {
   const socket = io("http://192.168.0.2:5000");
   const navigation = useNavigation();
 
+  const [userdata, setUserdata] = useState({});
   const [posts, setPosts] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
   const [buttonOpacity] = useState(new Animated.Value(0));
@@ -45,7 +45,7 @@ const MainScreen = () => {
           headers,
         })
         .then((res) => {
-          // setUsername(res.data.user.username);
+          setUserdata(res.data.user);
           // navigation.navigate("Home");
         })
         .catch((error) => {
@@ -75,7 +75,6 @@ const MainScreen = () => {
     try {
       const response = await postApi.get("/all");
       setPosts(response.data);
-      console.log(response.data[0].desc);
     } catch (error) {
       console.error("Error al obtener los posts:", error);
     }
@@ -109,8 +108,6 @@ const MainScreen = () => {
 
   const { height } = Dimensions.get("window");
 
-  console.log(height - 50 - 60);
-
   return (
     // <AlertNotificationRoot theme="dark">
 
@@ -125,6 +122,7 @@ const MainScreen = () => {
           <Post
           key={post._id}
           imageURL="run"
+          username={post.username}
           title={post.title}
           desc={post.desc}
           index={posts.length === (index+1) ? true : false}

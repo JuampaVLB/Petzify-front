@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext  } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,41 @@ import {
   Image,
 } from "react-native";
 import io from "socket.io-client";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+} from "react-native-alert-notification";
+import { UserContext } from '../UserContext';
 
 // Components
 import { postApi } from "../api/post";
 import profile from "../../assets/img/dog.jpeg";
 
 export default function Post({ estado, setEstado }) {
+
+  const { userData } = useContext(UserContext);
+
   const handleCloseModal = () => {
     setEstado(false);
+  };
+
+  const Danger = (str) => {
+    Dialog.show({
+      type: ALERT_TYPE.DANGER,
+      title: "Danger",
+      textBody: str,
+      button: "close",
+    });
+  };
+
+  const Success = (str) => {
+    Dialog.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: "Success",
+      textBody: str,
+      button: "close",
+    });
   };
 
   const [desc, setDesc] = useState("");
@@ -24,20 +51,34 @@ export default function Post({ estado, setEstado }) {
 
   const socket = io("http://192.168.0.2:5000");
 
+  
+
   const handlePost = () => {
-      postApi.post("/test", {
-        username: "adminrepro12",
+    postApi
+      .post("/test", {
+        username: userData.username,
         title: title,
         desc: desc,
       })
       .then((res) => {
-        console.log(res.data)
-        
+        console.log(res.data);
+        Success("Posteo Creado Perfectamente");
         socket.emit("client:post", true);
-        })
-      .catch((err) => {
-        console.log(err);
+        setDesc("");
+        setTitle("");
+
+        // handleCloseModal();
       })
+      .catch((error) => {
+        if (error.response.data.length >= 1) {
+          // Alert.alert(error.response.data[0].message);
+          Danger(error.response.data[0].message);
+          // handleCloseModal();
+        } else {
+          // Alert.alert(error.response.data.message);
+          Danger(error.response.data.message);
+        }
+      });
   };
 
   return (
@@ -47,11 +88,12 @@ export default function Post({ estado, setEstado }) {
       visible={estado}
       onRequestClose={handleCloseModal}
     >
+    <AlertNotificationRoot theme="dark">
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={styles.account_info}>
             <Image source={profile} style={styles.imageProfile} />
-            <Text>@Petzify-App</Text>
+            <Text>@{userData.username}</Text>
           </View>
           <View>
             <Text aria-label="Label for Title" nativeID="titulo">
@@ -96,6 +138,7 @@ export default function Post({ estado, setEstado }) {
           </TouchableOpacity>
         </View>
       </View>
+      </AlertNotificationRoot>
     </Modal>
   );
 }
