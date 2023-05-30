@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,10 @@ import {
   TextInput,
   Image,
 } from "react-native";
+import io from "socket.io-client";
 
+// Components
+import { postApi } from "../api/post";
 import profile from "../../assets/img/dog.jpeg";
 
 export default function Post({ estado, setEstado }) {
@@ -16,9 +19,29 @@ export default function Post({ estado, setEstado }) {
     setEstado(false);
   };
 
-  const [desc, setdesc] = useState("");
+  const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
 
+  const socket = io("http://192.168.0.2:5000");
+
+  const handlePost = () => {
+      postApi.post("/test", {
+        username: "adminrepro12",
+        title: title,
+        desc: desc,
+      })
+      .then((res) => {
+        console.log(res.data)
+        
+        socket.emit("client:post", true);
+        })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+
+  
 
   return (
     <Modal
@@ -52,7 +75,7 @@ export default function Post({ estado, setEstado }) {
             <TextInput
               aria-label="input"
               aria-labelledby="descripcion"
-              style={styles.input_desc} 
+              style={styles.input_desc}
               defaultValue={desc}
               onChangeText={(newText) => setDesc(newText)}
             />
@@ -62,7 +85,7 @@ export default function Post({ estado, setEstado }) {
           </TouchableOpacity>
           <TouchableOpacity
             title="Cerrar modal"
-            onPress={handleCloseModal}
+            onPress={handlePost}
             style={styles.btn_hide}
           >
             <Text style={{ color: "white" }}>Postear</Text>

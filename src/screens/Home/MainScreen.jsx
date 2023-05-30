@@ -20,10 +20,14 @@ import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import io from "socket.io-client";
 import { authApi } from "../../api/auth";
 import Post from "../../components/Post";
+import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
 
 const MainScreen = () => {
+  const socket = io("http://192.168.0.2:5000");
   const navigation = useNavigation();
+
+  const [posts, setPosts] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
   const [buttonOpacity] = useState(new Animated.Value(0));
 
@@ -67,26 +71,35 @@ const MainScreen = () => {
     }).start();
   };
 
-  useEffect(() => {
+  const fetchPosts = async () => {
+    try {
+      const response = await postApi.get("/all");
+      setPosts(response.data);
+      console.log(response.data[0].desc);
+    } catch (error) {
+      console.error("Error al obtener los posts:", error);
+    }
+  };
 
+  useEffect(() => {
     GetToken();
 
-    const socket = io("http://192.168.0.2:5000");
+    fetchPosts();
+  }, []);
 
-    socket.on("connect", () => {
-      console.log("Conectado desde client");
+
+  useEffect(() => {
+    socket.on("server:loadposts", () => {
+      fetchPosts();
     });
 
-    socket.emit("mensaje", "Hola, servidor!");
-
-    // socket.on("mensaje", (data) => {
-    //   console.log("Mensaje recibido del servidor:", data);
-    // });
-
-    return () => {
-      socket.disconnect();
-    };
+    fetchPosts();
   }, []);
+   
+
+  socket.on("server:loadposts", () => {
+    fetchPosts();
+  });
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -108,12 +121,20 @@ const MainScreen = () => {
         snapToInterval={height - 50 - 60}
         decelerationRate="fast"
       >
-        {[...Array(postCount)].map((_, index) => (
+        {/* {[...Array(postCount)].map((_, index) => (
           <Post
             key={index}
             imageURL="run"
             title="Titulo re copado"
             index={index}
+          />
+        ))} */}
+        {posts.map((post) => (
+          <Post
+          key={post.id}
+          imageURL="run"
+          title={post.title}
+          desc={post.desc}
           />
         ))}
       </ScrollView>
@@ -137,7 +158,7 @@ const MainScreen = () => {
         </TouchableOpacity>
       </Animated.View>
       <View style={styles.centeredView}>
-          <ModalPost estado={modalVisible} setEstado={setModalVisible} />
+        <ModalPost estado={modalVisible} setEstado={setModalVisible} />
       </View>
     </View>
 

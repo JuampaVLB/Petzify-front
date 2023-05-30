@@ -51,9 +51,7 @@ export default function Post(props) {
             </View>
           </View>
           <Text style={{ marginTop: 15 }}>
-            Hola a todos! Soy Juancito, un perrito negro sin raza definida, pero
-            eso no importa porque lo imporatante es que soy muy amigable y me
-            encanta hacer amigos.
+          {props.desc}
           </Text>
           <View
             style={{
