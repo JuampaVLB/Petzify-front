@@ -1,12 +1,14 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TextInput,
-  ProgressBarAndroid,
-} from "react-native";
+// Essentials
+
+import React, { useContext } from "react";
+import { View, Text, StyleSheet, Image, TextInput } from "react-native";
+
+// Components
+
+import { UserContext } from "../../UserContext";
+import { ProgressBar, Colors } from 'react-native-paper';
+
+// Assets
 
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -14,6 +16,8 @@ import { Foundation } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
 const Profile = () => {
+  const { userData } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <View style={styles.seguidores}>
@@ -34,7 +38,7 @@ const Profile = () => {
             <View style={styles.follows}>
               <Text>Seguidores: 1900</Text>
               <Text>Seguidos: 200</Text>
-              <Text>Institucion</Text>
+              <Text>{userData.username}</Text>
             </View>
           </View>
 
@@ -53,12 +57,7 @@ const Profile = () => {
           </View>
           <View>
             <Text>Nivel 1</Text>
-            <ProgressBarAndroid
-              styleAttr="Horizontal"
-              color="green"
-              indeterminate={false}
-              progress={0.6}
-            />
+            <ProgressBar progress={0.5} color="green" />
           </View>
         </View>
         <View style={styles.right}>

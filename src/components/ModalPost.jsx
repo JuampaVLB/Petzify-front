@@ -1,3 +1,5 @@
+// Essentials
+
 import React, { useState, useContext } from "react";
 import {
   View,
@@ -8,20 +10,25 @@ import {
   TextInput,
   Image,
 } from "react-native";
+
+// Components
+
+import { UserContext } from "../UserContext";
+import { postApi } from "../api/post";
+import * as ImagePicker from "expo-image-picker";
 import io from "socket.io-client";
 import {
   ALERT_TYPE,
   Dialog,
   AlertNotificationRoot,
 } from "react-native-alert-notification";
-import { UserContext } from '../UserContext';
 
-// Components
-import { postApi } from "../api/post";
+// Assets
+
+import { Entypo } from "@expo/vector-icons";
 import profile from "../../assets/img/dog.jpeg";
 
 export default function Post({ estado, setEstado }) {
-
   const { userData } = useContext(UserContext);
   const handleCloseModal = () => {
     setEstado(false);
@@ -78,6 +85,21 @@ export default function Post({ estado, setEstado }) {
       });
   };
 
+  const handleImage = async () => {
+    console.log("clicked image picker");
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Se requiere permiso para acceder a la biblioteca de medios.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+
+    if (!result.canceled) {
+      console.log(result);
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -85,56 +107,58 @@ export default function Post({ estado, setEstado }) {
       visible={estado}
       onRequestClose={handleCloseModal}
     >
-    <AlertNotificationRoot theme="dark">
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <View style={styles.account_info}>
-            <Image source={profile} style={styles.imageProfile} />
-            <Text>@{userData.username}</Text>
+      <AlertNotificationRoot theme="dark">
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={styles.account_info}>
+              <Image source={profile} style={styles.imageProfile} />
+              <Text>@{userData.username}</Text>
+            </View>
+            <View>
+              <Text aria-label="Label for Title" nativeID="titulo">
+                Titulo
+              </Text>
+              <TextInput
+                aria-label="input"
+                aria-labelledby="titulo"
+                style={styles.input_title}
+                defaultValue={title}
+                onChangeText={(newText) => setTitle(newText)}
+              />
+            </View>
+            <View>
+              <Text aria-label="Label for Desc" nativeID="descripcion">
+                Descripcion
+              </Text>
+              <TextInput
+                aria-label="input"
+                aria-labelledby="descripcion"
+                style={styles.input_desc}
+                defaultValue={desc}
+                multiline={true}
+                numberOfLines={4}
+                onChangeText={(newText) => setDesc(newText)}
+              />
+            </View>
+            <TouchableOpacity style={styles.btn_img} onPress={handleImage}>
+              <Text style={{ color: "white" }}>Agregar Imagen1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              title="Postear"
+              onPress={handlePost}
+              style={styles.btn_hide}
+            >
+              <Text style={{ color: "white" }}>Postear</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              title="Cerrar modal"
+              onPress={handleCloseModal}
+              style={styles.cross}
+            >
+              <Entypo name="cross" size={32} color="black" />
+            </TouchableOpacity>
           </View>
-          <View>
-            <Text aria-label="Label for Title" nativeID="titulo">
-              Titulo
-            </Text>
-            <TextInput
-              aria-label="input"
-              aria-labelledby="titulo"
-              style={styles.input_title}
-              defaultValue={title}
-              onChangeText={(newText) => setTitle(newText)}
-            />
-          </View>
-          <View>
-            <Text aria-label="Label for Desc" nativeID="descripcion">
-              Descripcion
-            </Text>
-            <TextInput
-              aria-label="input"
-              aria-labelledby="descripcion"
-              style={styles.input_desc}
-              defaultValue={desc}
-              onChangeText={(newText) => setDesc(newText)}
-            />
-          </View>
-          <TouchableOpacity style={styles.btn_img}>
-            <Text style={{ color: "white" }}>Agregar Imagen</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            title="Postear"
-            onPress={handlePost}
-            style={styles.btn_hide}
-          >
-            <Text style={{ color: "white" }}>Postear</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            title="Cerrar modal"
-            onPress={handleCloseModal}
-            style={styles.btn_hide}
-          >
-            <Entypo name="cross" size={24} color="black" />
-          </TouchableOpacity>
         </View>
-      </View>
       </AlertNotificationRoot>
     </Modal>
   );
@@ -194,7 +218,6 @@ const styles = StyleSheet.create({
   },
   input_desc: {
     width: 300,
-    height: 200,
     backgroundColor: "white",
     borderWidth: 1,
     borderColor: "black",
@@ -217,5 +240,11 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: "orange",
     borderRadius: 10,
+  },
+  cross: {
+    position: "absolute",
+    right: 0,
+    marginTop: "1%",
+    marginLeft: "10%",
   },
 });

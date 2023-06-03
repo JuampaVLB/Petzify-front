@@ -67,7 +67,7 @@ const MainScreen = () => {
   const animatebtn = () => {
     Animated.timing(buttonOpacity, {
       toValue: showButtons ? 1 : 0,
-      duration: 500,
+      duration: 200,
       useNativeDriver: true,
     }).start();
   };
@@ -87,7 +87,6 @@ const MainScreen = () => {
     fetchPosts();
   }, []);
 
-
   useEffect(() => {
     socket.on("server:loadposts", () => {
       fetchPosts();
@@ -95,15 +94,12 @@ const MainScreen = () => {
 
     fetchPosts();
   }, []);
-   
 
   socket.on("server:loadposts", () => {
     fetchPosts();
   });
 
   const [modalVisible, setModalVisible] = useState(false);
-
-  const postCount = 3;
 
   const scrollViewRef = useRef(null);
 
@@ -121,12 +117,12 @@ const MainScreen = () => {
       >
         {posts.map((post, index) => (
           <Post
-          key={post._id}
-          imageURL="run"
-          username={post.username}
-          title={post.title}
-          desc={post.desc}
-          index={posts.length === (index+1) ? true : false}
+            key={post._id}
+            imageURL="run"
+            username={post.username}
+            title={post.title}
+            desc={post.desc}
+            index={posts.length === index + 1 ? true : false}
           />
         ))}
       </ScrollView>
