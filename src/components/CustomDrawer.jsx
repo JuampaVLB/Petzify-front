@@ -37,8 +37,9 @@ const CustomDrawer = (props) => {
       {
         text: "OK",
         onPress: async () => {
+          await AsyncStorage.clear()
           await AsyncStorage.removeItem("TokenJWT");
-          navigation.navigate("Login");
+         navigation.navigate("Login");
         },
       },
     ]);
@@ -59,6 +60,7 @@ const CustomDrawer = (props) => {
         })
         .then((res) => {
           setData(res.data.user);
+          console.log("data es: " + res.data.user);
           if (res.data.user.role === "user") setRole("Usuario");
           if (res.data.user.role === "institution") setRole("Institucion");
           if (res.data.user.role === "business") setRole("Negocio");

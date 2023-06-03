@@ -1,4 +1,4 @@
-import React, { useState, useContext  } from "react";
+import React, { useState, useContext, useEffect  } from "react";
 import {
   View,
   Text,
@@ -23,7 +23,6 @@ import profile from "../../assets/img/dog.jpeg";
 export default function Post({ estado, setEstado }) {
 
   const { userData } = useContext(UserContext);
-
   const handleCloseModal = () => {
     setEstado(false);
   };
@@ -50,8 +49,6 @@ export default function Post({ estado, setEstado }) {
   const [title, setTitle] = useState("");
 
   const socket = io("http://192.168.0.2:5000");
-
-  
 
   const handlePost = () => {
     postApi
@@ -80,6 +77,14 @@ export default function Post({ estado, setEstado }) {
         }
       });
   };
+
+  useEffect(() => {
+    console.log("Username es xd:", userData.username);
+  }, [userData]);
+
+  useEffect(() => {
+    console.log("Username es xd:", userData.username);
+  }, []);
 
   return (
     <Modal

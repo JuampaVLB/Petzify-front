@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   Alert,
   View,
@@ -15,9 +15,12 @@ import {
   Dialog,
   AlertNotificationRoot,
 } from "react-native-alert-notification";
+import { UserContext } from '../../UserContext';
 import { authApi } from "../../api/auth";
 
 const LoginScreen = () => {
+
+  const { setUserData } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,7 +43,6 @@ const LoginScreen = () => {
       })
       .then(async function (response) {
         let token = response.headers.get("auth-token");
-
         saveToken(token);
       })
       .catch(function (error) {
