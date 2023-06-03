@@ -9,35 +9,35 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
 
-  const GetToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem("TokenJWT");
+  // const GetToken = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("TokenJWT");
 
-      let headers = {
-        "Content-type": "application/json; charset=UTF-8",
-        "auth-token": value,
-      };
+  //     let headers = {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //       "auth-token": value,
+  //     };
 
-      authApi
-        .get("/profile", {
-          headers,
-        })
-        .then((res) => {
-          setUserData(res.data.user);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      throw error;
-    }
-  };
+  //     authApi
+  //       .get("/profile", {
+  //         headers,
+  //       })
+  //       .then((res) => {
+  //         setUserData(res.data.user);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
-  useEffect(() => {
-    GetToken();
-  }, []);
+  // useEffect(() => {
+  //   GetToken();
+  // }, []);
 
-  GetToken();
+  // GetToken();
 
   return (
     <UserContext.Provider value={{ userData, setUserData }}>

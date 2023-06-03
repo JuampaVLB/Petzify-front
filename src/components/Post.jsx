@@ -1,4 +1,5 @@
-import React from "react";
+// Essentials
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -7,7 +8,9 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
-
+// Components
+import { UserContext } from "../UserContext";
+// Assets
 import profile from "../../assets/img/dog.jpeg";
 import dog from "../../assets/img/run.webp";
 import { Entypo } from "@expo/vector-icons";
@@ -16,6 +19,9 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function Post(props) {
+
+  const { userData } = useContext(UserContext);
+
   return (
     <View style={[styles.container, props.index === true ? styles.lastPost : null]}>
       <View style={styles.top}>
@@ -81,7 +87,7 @@ export default function Post(props) {
             }}
           >
             <Image source={dog} style={styles.imageProfile} />
-            <Text style={styles.text}>@Yo</Text>
+            <Text style={styles.text}>@{userData.username}</Text>
           </View>
           <TextInput
             style={{ marginTop: 10, marginLeft: 45 }}

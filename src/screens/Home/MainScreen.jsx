@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //   Toast,
 // } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { UserContext } from "../../UserContext";
 import io from "socket.io-client";
 import { authApi } from "../../api/auth";
 import Post from "../../components/Post";
@@ -23,10 +24,10 @@ import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
 
 const MainScreen = () => {
-  const socket = io("http://192.168.0.2:5000");
+  const socket = io("http://192.168.1.40:3000");
   const navigation = useNavigation();
 
-  const [userdata, setUserdata] = useState({});
+  const { setUserData } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
   const [buttonOpacity] = useState(new Animated.Value(0));
@@ -45,7 +46,7 @@ const MainScreen = () => {
           headers,
         })
         .then((res) => {
-          setUserdata(res.data.user);
+          setUserData(res.data.user);
           // navigation.navigate("Home");
         })
         .catch((error) => {

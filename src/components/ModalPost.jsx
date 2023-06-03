@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect  } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -48,7 +48,7 @@ export default function Post({ estado, setEstado }) {
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
 
-  const socket = io("http://192.168.0.2:5000");
+  const socket = io("http://192.168.1.40:3000");
 
   const handlePost = () => {
     postApi
@@ -77,14 +77,6 @@ export default function Post({ estado, setEstado }) {
         }
       });
   };
-
-  useEffect(() => {
-    console.log("Username es xd:", userData.username);
-  }, [userData]);
-
-  useEffect(() => {
-    console.log("Username es xd:", userData.username);
-  }, []);
 
   return (
     <Modal
@@ -128,7 +120,7 @@ export default function Post({ estado, setEstado }) {
             <Text style={{ color: "white" }}>Agregar Imagen</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            title="Cerrar modal"
+            title="Postear"
             onPress={handlePost}
             style={styles.btn_hide}
           >
@@ -139,7 +131,7 @@ export default function Post({ estado, setEstado }) {
             onPress={handleCloseModal}
             style={styles.btn_hide}
           >
-            <Text style={{ color: "white" }}>Cerrar Formulario</Text>
+            <Entypo name="cross" size={24} color="black" />
           </TouchableOpacity>
         </View>
       </View>

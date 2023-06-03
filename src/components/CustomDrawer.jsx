@@ -17,14 +17,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import dog from "../../assets/img/dog.jpeg";
 
-import { authApi } from "../api/auth";
-
 const CustomDrawer = (props) => {
 
-  const { setUserData } = useContext(UserContext);
-
-  const [data, setData] = useState({});
-  const [role, setRole] = useState("NaN");
+  const { userData, setUserData } = useContext(UserContext);
   const navigation = useNavigation();
 
   const YesOrNo = () => {
@@ -37,55 +32,57 @@ const CustomDrawer = (props) => {
       {
         text: "OK",
         onPress: async () => {
-          await AsyncStorage.clear()
           await AsyncStorage.removeItem("TokenJWT");
+          setUserData({});
          navigation.navigate("Login");
         },
       },
     ]);
   };
 
-  const GetToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem("TokenJWT");
+  // const GetToken = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("TokenJWT");
 
-      let headers = {
-        "Content-type": "application/json; charset=UTF-8",
-        "auth-token": value,
-      };
+  //     let headers = {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //       "auth-token": value,
+  //     };
 
-      authApi
-        .get("/profile", {
-          headers: headers,
-        })
-        .then((res) => {
-          setData(res.data.user);
-          console.log("data es: " + res.data.user);
-          if (res.data.user.role === "user") setRole("Usuario");
-          if (res.data.user.role === "institution") setRole("Institucion");
-          if (res.data.user.role === "business") setRole("Negocio");
-          if (res.data.user.role === "admin") setRole("Administrador");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      throw error;
-    }
-  };
+  //     authApi
+  //       .get("/profile", {
+  //         headers: headers,
+  //       })
+  //       .then((res) => {
+  //         setData(res.data.user);
+  //         console.log("data es: " + res.data.user);
+  //         if (res.data.user.role === "user") setRole("Usuario");
+  //         if (res.data.user.role === "institution") setRole("Institucion");
+  //         if (res.data.user.role === "business") setRole("Negocio");
+  //         if (res.data.user.role === "admin") setRole("Administrador");
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
-  useEffect(() => {
-    GetToken();
-  }, []);
+  // useEffect(() => {
+  //   GetToken();
+  // }, []);
+
+  console.log(userData);
 
   return (
     <View style={{ flex: 5 }}>
       <View style={styles.profile}>
         <Image source={dog} style={styles.image} />
         <View style={styles.data}>
-          <Text style={styles.text}>{data.username}</Text>
+          <Text style={styles.text}>{userData.username}</Text>
           <Text style={styles.text}>Seguidores: 200</Text>
-          <Text style={styles.type}>{role}</Text>
+          <Text style={styles.type}>{userData.role}</Text>
         </View>
       </View>
       <DrawerContentScrollView {...props} style={styles.menu}>
