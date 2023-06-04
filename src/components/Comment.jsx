@@ -33,7 +33,7 @@ comment: {
     alignItems: "flex-start",
     justifyContent: "space-around",
     padding: 15,
-    backgroundColor: "gray",
+    backgroundColor: "#F4F4F4",
     borderRadius: 15,
   },
   imageProfile: {

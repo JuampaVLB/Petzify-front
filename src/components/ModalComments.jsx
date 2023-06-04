@@ -26,21 +26,27 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 const ModalComments = ({ estado, setEstado, room }) => {
-  const socket = io("http://192.168.1.38:5000");
+  const socket = io("http://192.168.0.2:5000");
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
-  const handleSubmit = () => {
-    console.log("comentaste esto: " + comment + " y tu room es:" + room);
-    socket.emit("client:comment", room);
-    setComment("");
+  const handleSubmit = async () => {
+    try {
+      const response = await postApi.post(`/send/comment/`, {
+        room,
+        comment
+      });
+      socket.emit("client:comment", room);
+      setComment("");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchPosts = async (sala) => {
     try {
       const response = await postApi.get(`/all/comment/${sala}`);
-      console.log(response.data[0].comments);
       setComments(response.data[0].comments);
     } catch (error) {
       console.error("Error al obtener los comentarios:", error);
@@ -48,18 +54,14 @@ const ModalComments = ({ estado, setEstado, room }) => {
   };
 
   useEffect(() => {
-    console.log(room);
     if (room) {
-      console.log("ya tengo room");
       fetchPosts(room);
     }
+  }, [estado]);
 
-    // socket.on("server:loadcomments", (data) => {
-    //   // console.log(data[0].comments);
-    //   setComments(data[0].comments);
-    //   console.log(data);
-    // });
-  }, [room]);
+  socket.on("server:loadcomments", (data) => {
+    setComments(data[0].comments);
+  });
 
   return (
     <View style={styles.centeredView}>
@@ -88,24 +90,7 @@ const ModalComments = ({ estado, setEstado, room }) => {
                 ? comments.map((c, index) => (
                     <Comment key={index} message={c} />
                   ))
-                : console.log("cargando...")}
-              {/* {comments.map((c, index) => (
-             console.log("comentario N" + index + " : " + c)
-              <Comment
-              key={index}
-              message={c}
-              />  
-            }
-          // <Post
-          //   key={post._id}
-          //   imageURL="run"
-          //   username={post.username}
-          //   title={post.title}
-          //   desc={post.desc}
-          //   index={posts.length === index + 1 ? true : false}
-          //   room={post.room}
-          // />
-             } */}
+                : <Text>Sin comentarios</Text>}
             </ScrollView>
             <View style={styles.send_comment}>
               <View style={styles.send_comment_desc}>
@@ -187,18 +172,20 @@ const styles = StyleSheet.create({
   },
   comments_container: {
     width: "100%",
-    maxHeight: "89%",
+    maxHeight: "100%",
   },
   send_comment: {
     width: "110%",
+    height: 60,
     display: "flex",
     flexDirection: "row",
     padding: 5,
     paddingLeft: 15,
     paddingRight: 15,
     justifyContent: "space-between",
-    backgroundColor: "gray",
+    backgroundColor: "#F4F4F4",
     alignItems: "center",
+    marginTop: 20,
   },
   send_comment_desc: {
     display: "flex",

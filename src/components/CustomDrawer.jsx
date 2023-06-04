@@ -73,7 +73,6 @@ const CustomDrawer = (props) => {
   //   GetToken();
   // }, []);
 
-  console.log(userData);
 
   return (
     <View style={{ flex: 5 }}>

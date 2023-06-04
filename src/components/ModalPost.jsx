@@ -55,7 +55,7 @@ export default function Post({ estado, setEstado }) {
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
 
-  const socket = io("http://192.168.1.38:5000");
+  const socket = io("http://192.168.0.2:5000");
 
   const handlePost = () => {
     postApi
@@ -65,7 +65,6 @@ export default function Post({ estado, setEstado }) {
         desc: desc,
       })
       .then((res) => {
-        // console.log(res.data);
         Success("Posteo Creado Perfectamente");
         socket.emit("client:post", true);
         setDesc("");
