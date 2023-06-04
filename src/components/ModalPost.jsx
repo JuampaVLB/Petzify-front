@@ -55,7 +55,10 @@ export default function Post({ estado, setEstado }) {
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
 
-  const socket = io("http://192.168.0.2:5000");
+  const socket = io("https://petzify.up.railway.app/");
+
+  // https://petzify.up.railway.app/
+  // http://192.168.0.2:5000
 
   const handlePost = () => {
     postApi

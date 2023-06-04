@@ -1,6 +1,6 @@
 // Essentials
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Alert,
   Modal,
@@ -15,6 +15,7 @@ import {
 
 // Components
 
+import { UserContext } from "../UserContext";
 import io from "socket.io-client";
 import Comment from "./Comment";
 import { postApi } from "../api/post";
@@ -22,20 +23,25 @@ import { postApi } from "../api/post";
 // Assets
 
 import profile from "../../assets/img/dog.jpeg";
-import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 const ModalComments = ({ estado, setEstado, room }) => {
-  const socket = io("http://192.168.0.2:5000");
+
+  const { userData } = useContext(UserContext);
+  const socket = io("https://petzify.up.railway.app/");
+
+  // https://petzify.up.railway.app/
+  // http://192.168.0.2:5000
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
   const handleSubmit = async () => {
     try {
-      const response = await postApi.post(`/send/comment/`, {
+      await postApi.post(`/send/comment/`, {
         room,
-        comment
+        comment,
+        username: userData.username
       });
       socket.emit("client:comment", room);
       setComment("");
@@ -57,6 +63,9 @@ const ModalComments = ({ estado, setEstado, room }) => {
     if (room) {
       fetchPosts(room);
     }
+
+    setComments([]);
+
   }, [estado]);
 
   socket.on("server:loadcomments", (data) => {
@@ -86,11 +95,13 @@ const ModalComments = ({ estado, setEstado, room }) => {
               <Text style={{ fontSize: 20 }}>Comentarios</Text>
             </View>
             <ScrollView style={styles.comments_container}>
-              {comments.length > 0
-                ? comments.map((c, index) => (
-                    <Comment key={index} message={c} />
-                  ))
-                : <Text>Sin comentarios</Text>}
+              {comments.length > 0 ? (
+                comments.map((c, index) => <Comment key={index} username={c.username} message={c.comment} />)
+              ) : (
+                <View style={styles.noComments_box}>
+                <Text style={styles.noComments}>0 Comentarios</Text>
+                </View>
+              )}
             </ScrollView>
             <View style={styles.send_comment}>
               <View style={styles.send_comment_desc}>
@@ -192,6 +203,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 15,
   },
+  noComments_box: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    padding: 25,
+  },
+  noComments: {
+    fontSize: 20,
+  }
 });
 
 export default ModalComments;

@@ -15,7 +15,7 @@ const Comment = (props) => {
     <View style={styles.comment}>
       <Image source={profile} style={styles.imageProfile} />
       <View style={styles.comment_desc}>
-        <Text>JuampaVLB</Text>
+        <Text>{props.username}</Text>
         <Text style={styles.comment_text}>
           {props.message}
         </Text>
