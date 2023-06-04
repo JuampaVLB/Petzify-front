@@ -24,7 +24,8 @@ import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
 
 const MainScreen = () => {
-  const socket = io("http://192.168.1.40:3000");
+  const socket = io("http://192.168.1.38:5000");
+
   const navigation = useNavigation();
 
   const { setUserData } = useContext(UserContext);
@@ -74,7 +75,7 @@ const MainScreen = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await postApi.get("/all");
+      const response = await postApi.get("/all/post");
       setPosts(response.data);
     } catch (error) {
       console.error("Error al obtener los posts:", error);
@@ -123,6 +124,7 @@ const MainScreen = () => {
             title={post.title}
             desc={post.desc}
             index={posts.length === index + 1 ? true : false}
+            room={post.room}
           />
         ))}
       </ScrollView>

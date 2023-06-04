@@ -1,6 +1,6 @@
 // Essentials
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Modal,
@@ -13,13 +13,54 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+// Components
+
+import io from "socket.io-client";
+import Comment from "./Comment";
+import { postApi } from "../api/post";
+
 // Assets
 
 import profile from "../../assets/img/dog.jpeg";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-const ModalComments = ({ estado, setEstado }) => {
+const ModalComments = ({ estado, setEstado, room }) => {
+  const socket = io("http://192.168.1.38:5000");
+
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = () => {
+    console.log("comentaste esto: " + comment + " y tu room es:" + room);
+    socket.emit("client:comment", room);
+    setComment("");
+  };
+
+  const fetchPosts = async (sala) => {
+    try {
+      const response = await postApi.get(`/all/comment/${sala}`);
+      console.log(response.data[0].comments);
+      setComments(response.data[0].comments);
+    } catch (error) {
+      console.error("Error al obtener los comentarios:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(room);
+    if (room) {
+      console.log("ya tengo room");
+      fetchPosts(room);
+    }
+
+    // socket.on("server:loadcomments", (data) => {
+    //   // console.log(data[0].comments);
+    //   setComments(data[0].comments);
+    //   console.log(data);
+    // });
+  }, [room]);
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -43,127 +84,40 @@ const ModalComments = ({ estado, setEstado }) => {
               <Text style={{ fontSize: 20 }}>Comentarios</Text>
             </View>
             <ScrollView style={styles.comments_container}>
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                    voluptas inventore nam expedita quis iure similique, quas
-                    corporis soluta. Rerum, accusantium id. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Distinctio fugiat
-                    libero ipsa praesentium voluptas possimus minima tenetur,
-                    corporis, recusandae magni repellat asperiores ducimus
-                    repudiandae officia! Eos soluta officiis reprehenderit
-                    laborum? Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Magni, corporis aperiam adipisci optio tenetur
-                    voluptates reiciendis culpa veritatis delectus nemo,
-                    deleniti modi expedita provident. Neque quos ipsum voluptas
-                    molestias dolore?
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
-
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
-
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                    voluptas inventore nam expedita quis iure similique, quas
-                    corporis soluta. Rerum, accusantium id. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Distinctio fugiat
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
-
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                    voluptas inventore nam expedita quis iure similique, quas
-                    corporis soluta. Rerum, accusantium id. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Distinctio fugiat
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
-
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                    voluptas inventore nam expedita quis iure similique, quas
-                    corporis soluta. Rerum, accusantium id. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Distinctio fugiat
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
-
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                    voluptas inventore nam expedita quis iure similique, quas
-                    corporis soluta. Rerum, accusantium id. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Distinctio fugiat
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
-
-              <View style={styles.comment}>
-                <Image source={profile} style={styles.imageProfile} />
-                <View style={styles.comment_desc}>
-                  <Text>JuampaVLB</Text>
-                  <Text style={styles.comment_text}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Harum beatae ex vero nihil. Voluptatibus quasi, eum veniam
-                    voluptas inventore nam expedita quis iure similique, quas
-                    corporis soluta. Rerum, accusantium id. Lorem ipsum dolor
-                    sit amet consectetur adipisicing elit. Distinctio fugiat
-                  </Text>
-                </View>
-                <Ionicons name="ios-paw-outline" size={24} color="green" />
-              </View>
+              {comments.length > 0
+                ? comments.map((c, index) => (
+                    <Comment key={index} message={c} />
+                  ))
+                : console.log("cargando...")}
+              {/* {comments.map((c, index) => (
+             console.log("comentario N" + index + " : " + c)
+              <Comment
+              key={index}
+              message={c}
+              />  
+            }
+          // <Post
+          //   key={post._id}
+          //   imageURL="run"
+          //   username={post.username}
+          //   title={post.title}
+          //   desc={post.desc}
+          //   index={posts.length === index + 1 ? true : false}
+          //   room={post.room}
+          // />
+             } */}
             </ScrollView>
             <View style={styles.send_comment}>
               <View style={styles.send_comment_desc}>
                 <Image source={profile} style={styles.imageProfile} />
                 <TextInput
                   placeholder="Agregar Comentario..."
-                  // defaultValue={username}
-                  // onChangeText={(newText) => setUsername(newText)}
+                  defaultValue={comment}
+                  onChangeText={(newText) => setComment(newText)}
                 />
               </View>
               <TouchableOpacity>
-                <Text>Enviar</Text>
+                <Text onPress={handleSubmit}>Enviar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -226,31 +180,14 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "100%",
   },
-  comments_container: {
-    width: "100%",
-    maxHeight: "89%",
-  },
-  comment: {
-    marginTop: 30,
-    display: "flex",
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-around",
-    padding: 5,
-  },
   imageProfile: {
     width: 38,
     height: 38,
     borderRadius: 50,
   },
-  comment_desc: {
-    marginLeft: 20,
-  },
-  comment_text: {
-    flexWrap: "wrap",
-    maxWidth: "90%",
-    fontSize: 14,
+  comments_container: {
+    width: "100%",
+    maxHeight: "89%",
   },
   send_comment: {
     width: "110%",
@@ -267,7 +204,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 15,
-  }
+  },
 });
 
 export default ModalComments;

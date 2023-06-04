@@ -7,13 +7,14 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 
 // Components
 
 import { UserContext } from "../UserContext";
 import ModalComments from "./ModalComments";
+import { postApi } from "../api/post";
 
 // Assets
 
@@ -25,16 +26,27 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function Post(props) {
-
   const [modalVisible, setModalVisible] = useState(false);
+  const [room, setRoom] = useState("");
   const { userData } = useContext(UserContext);
-
-  const handleComments = () => {
-    setModalVisible(true);
-  }
+  // 95052dca-3223-4d1f-a7bf-ecc3975fe4db
+  const handleComments = (postId) => {
+    try {
+      setRoom(postId);
+      // const response = await postApi.get(`/all/comment/${room}`);
+      // setComments(response.data);
+      setModalVisible(true);
+      
+      
+    } catch (error) {
+      console.error("Error al obtener los posts:", error);
+    }
+  };
 
   return (
-    <View style={[styles.container, props.index === true ? styles.lastPost : null]}>
+    <View
+      style={[styles.container, props.index === true ? styles.lastPost : null]}
+    >
       <View style={styles.top}>
         <View style={styles.info}>
           <View
@@ -58,15 +70,20 @@ export default function Post(props) {
             <Text style={{ fontWeight: "bold", fontSize: 22 }}>
               {props.title}
             </Text>
-            <View style={{ display: "flex", flexDirection: "row", gap: 15, marginRight: 10 }}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 15,
+                marginRight: 10,
+              }}
+            >
               <AntDesign name="like2" size={24} color="black" />
               <Feather name="send" size={24} color="black" />
               <FontAwesome name="bookmark-o" size={24} color="black" />
             </View>
           </View>
-          <Text style={{ marginTop: 15 }}>
-          {props.desc}
-          </Text>
+          <Text style={{ marginTop: 15 }}>{props.desc}</Text>
           <View
             style={{
               borderBottomColor: "black",
@@ -101,15 +118,19 @@ export default function Post(props) {
             <Text style={styles.text}>@{userData.username}</Text>
           </View>
           <TouchableOpacity
-          style={{ marginTop: 10, marginLeft: 45, height: 100,}}
-          onPress={handleComments}
+            style={{ marginTop: 10, marginLeft: 45, height: 100 }}
+            onPress={() => handleComments(props.room)}
           >
             <Text>Comentar...</Text>
           </TouchableOpacity>
         </View>
       </View>
       <View>
-        <ModalComments estado={modalVisible} setEstado={setModalVisible}/>
+        <ModalComments
+          estado={modalVisible}
+          setEstado={setModalVisible}
+          room={room}
+        />
       </View>
     </View>
   );
@@ -161,5 +182,5 @@ const styles = StyleSheet.create({
   },
   lastPost: {
     marginBottom: 55,
-  }
+  },
 });
