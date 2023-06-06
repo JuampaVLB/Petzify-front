@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     minHeight: 70,
     backgroundColor: "green",
     position: "absolute",
-    bottom: 100,
+    bottom: 130,
     right: 20,
     display: "flex",
     justifyContent: "center",

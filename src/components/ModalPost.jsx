@@ -15,6 +15,7 @@ import {
 
 import { UserContext } from "../UserContext";
 import { postApi } from "../api/post";
+// import EmoteKeyboard from "./EmoteKeyboard";
 import * as ImagePicker from "expo-image-picker";
 import io from "socket.io-client";
 import {
@@ -25,7 +26,9 @@ import {
 
 // Assets
 
+import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import profile from "../../assets/img/dog.jpeg";
 
 export default function Post({ estado, setEstado }) {
@@ -116,42 +119,43 @@ export default function Post({ estado, setEstado }) {
               <Image source={profile} style={styles.imageProfile} />
               <Text>@{userData.username}</Text>
             </View>
-            <View>
-              <Text aria-label="Label for Title" nativeID="titulo">
-                Titulo
-              </Text>
-              <TextInput
-                aria-label="input"
-                aria-labelledby="titulo"
-                style={styles.input_title}
-                defaultValue={title}
-                onChangeText={(newText) => setTitle(newText)}
-              />
+            <TextInput
+              aria-label="input"
+              aria-labelledby="titulo"
+              style={styles.input_title}
+              placeholder="Escribe un Titulo"
+              defaultValue={title}
+              onChangeText={(newText) => setTitle(newText)}
+            />
+            <TextInput
+              aria-label="input"
+              aria-labelledby="descripcion"
+              style={styles.input_desc}
+              defaultValue={desc}
+              placeholder="Escribe una Descripcion"
+              multiline={true}
+              numberOfLines={4}
+              onChangeText={(newText) => setDesc(newText)}
+            />
+            <View style={styles.bottom}>
+              <View style={styles.bottom_icons}>
+                <TouchableOpacity style={styles.btn_img} onPress={handleImage}>
+                  <Ionicons name="image-outline" size={34} color="green" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btn_img}
+                >
+                  <MaterialIcons name="tag-faces" size={34} color="green" />
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                title="Postear"
+                onPress={handlePost}
+                style={styles.btn_hide}
+              >
+                <Text style={{ color: "white" }}>Postear</Text>
+              </TouchableOpacity>
             </View>
-            <View>
-              <Text aria-label="Label for Desc" nativeID="descripcion">
-                Descripcion
-              </Text>
-              <TextInput
-                aria-label="input"
-                aria-labelledby="descripcion"
-                style={styles.input_desc}
-                defaultValue={desc}
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={(newText) => setDesc(newText)}
-              />
-            </View>
-            <TouchableOpacity style={styles.btn_img} onPress={handleImage}>
-              <Text style={{ color: "white" }}>Agregar Imagen1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              title="Postear"
-              onPress={handlePost}
-              style={styles.btn_hide}
-            >
-              <Text style={{ color: "white" }}>Postear</Text>
-            </TouchableOpacity>
             <TouchableOpacity
               title="Cerrar modal"
               onPress={handleCloseModal}
@@ -171,6 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#000000AA",
   },
   imageProfile: {
     width: 38,
@@ -192,7 +197,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: "90%",
-    height: "85%",
+    height: "50%",
+    // padding: 20,
   },
   account_info: {
     display: "flex",
@@ -211,42 +217,73 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input_title: {
-    width: 300,
+    width: 330,
     height: 50,
     backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "black",
     paddingLeft: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 6,
+    shadowOpacity: 0.3,
+    elevation: 4,
   },
   input_desc: {
-    width: 300,
+    width: 330,
     backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "black",
     paddingLeft: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 6,
+    shadowOpacity: 0.3,
+    elevation: 4,
   },
   btn_img: {
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    width: 300,
-    height: 40,
-    backgroundColor: "green",
+    alignItems: "center",
     borderRadius: 10,
+    height: 44,
+    padding: 5,
   },
   btn_hide: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 300,
+    width: "60%",
     height: 40,
-    backgroundColor: "orange",
+    backgroundColor: "green",
     borderRadius: 10,
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 54,
+    },
+    shadowRadius: 55,
+    shadowOpacity: 1,
   },
   cross: {
     position: "absolute",
     right: 0,
     marginTop: "1%",
     marginLeft: "10%",
+  },
+  bottom: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "85%",
+  },
+  bottom_icons: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
   },
 });
