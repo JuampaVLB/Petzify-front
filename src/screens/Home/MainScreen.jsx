@@ -51,7 +51,6 @@ const MainScreen = () => {
         })
         .then((res) => {
           setUserData(res.data.user);
-          // navigation.navigate("Home");
         })
         .catch((error) => {
           console.log(error);
