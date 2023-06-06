@@ -15,7 +15,6 @@ import {
 
 import { UserContext } from "../UserContext";
 import { postApi } from "../api/post";
-// import EmoteKeyboard from "./EmoteKeyboard";
 import * as ImagePicker from "expo-image-picker";
 import io from "socket.io-client";
 import {
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
     width: "85%",
     borderBottomWidth: 1,
     paddingBottom: 10,
-    borderColor: "black",
+    borderColor: "#ccc",
   },
   textStyle: {
     color: "white",

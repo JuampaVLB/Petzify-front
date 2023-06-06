@@ -14,7 +14,7 @@ import {
 
 import { UserContext } from "../UserContext";
 import ModalComments from "./ModalComments";
-import { postApi } from "../api/post";
+import { Button, Menu, Divider, PaperProvider } from "react-native-paper";
 
 // Assets
 
@@ -24,6 +24,7 @@ import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 export default function Post(props) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,15 +34,21 @@ export default function Post(props) {
   const handleComments = (postId) => {
     try {
       setRoom(postId);
-      // const response = await postApi.get(`/all/comment/${room}`);
-      // setComments(response.data);
       setModalVisible(true);
-      
-      
     } catch (error) {
       console.error("Error al obtener los posts:", error);
     }
   };
+
+  const [visible, setVisible] = React.useState(false);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
+  const deletePost = (room) => {
+    console.log("borraste el posteo" + room);
+  }
 
   return (
     <View
@@ -60,7 +67,32 @@ export default function Post(props) {
             <Image source={profile} style={styles.imageProfile} />
             <Text style={styles.text}>{props.username}</Text>
           </View>
-          <Entypo name="dots-three-vertical" size={24} color="black" />
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchorPosition="bottom"
+            // contentStyle={{ backgroundColor: "red" }}
+            // style={{ backgroundColor: "purple" }}
+            anchor={
+              <Button onPress={openMenu}>
+                <SimpleLineIcons name="options" size={24} color="black" />
+              </Button>
+            }
+          >
+            <Menu.Item
+              leadingIcon="share"
+              onPress={() => {}}
+              title="Compartir"
+              // disabled
+            />
+            <Menu.Item leadingIcon="pencil" onPress={() => {}} title="Editar" />
+            <Menu.Item leadingIcon="delete" onPress={() => deletePost(props.room)} title="Borrar" />
+            <Menu.Item
+              leadingIcon="close-circle"
+              onPress={() => {}}
+              title="Dejar de seguir"
+            />
+          </Menu>
         </View>
         <Image source={dog} style={styles.image} />
       </View>

@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
   smallButtonsContainer: {
     position: "absolute",
-    bottom: 200,
+    bottom: 230,
     right: 30,
     display: "flex",
     flexDirection: "column",

@@ -19,6 +19,7 @@ import { UserContext } from "../UserContext";
 import io from "socket.io-client";
 import Comment from "./Comment";
 import { postApi } from "../api/post";
+import Loader from "./Loader";
 
 // Assets
 
@@ -35,6 +36,7 @@ const ModalComments = ({ estado, setEstado, room }) => {
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -79,7 +81,6 @@ const ModalComments = ({ estado, setEstado, room }) => {
         transparent={true}
         visible={estado}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setEstado(false);
         }}
       >
@@ -99,7 +100,8 @@ const ModalComments = ({ estado, setEstado, room }) => {
                 comments.map((c, index) => <Comment key={index} username={c.username} message={c.comment} />)
               ) : (
                 <View style={styles.noComments_box}>
-                <Text style={styles.noComments}>0 Comentarios</Text>
+                {/* <Text style={styles.noComments}>0 Comentarios</Text>  */}
+                <Loader setEstado={setLoading} estado={loading} />
                 </View>
               )}
             </ScrollView>
