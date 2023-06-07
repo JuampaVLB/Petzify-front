@@ -14,13 +14,13 @@ import {
 
 import { UserContext } from "../UserContext";
 import ModalComments from "./ModalComments";
-import { Button, Menu, Divider, PaperProvider } from "react-native-paper";
+import { Button, Menu } from "react-native-paper";
+import { postApi } from "../api/post";
 
 // Assets
 
 import profile from "../../assets/img/dog.jpeg";
 import dog from "../../assets/img/run.webp";
-import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -30,7 +30,7 @@ export default function Post(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [room, setRoom] = useState("");
   const { userData } = useContext(UserContext);
-  // 95052dca-3223-4d1f-a7bf-ecc3975fe4db
+
   const handleComments = (postId) => {
     try {
       setRoom(postId);
@@ -48,7 +48,16 @@ export default function Post(props) {
 
   const deletePost = (room) => {
     console.log("borraste el posteo" + room);
-  }
+
+    postApi
+      .delete(`/p/b7d8b47f-307d-4680-aa07-cca58e00b5d5`)
+      .then((res) => {
+        console.log("se borro bien");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <View
@@ -86,7 +95,11 @@ export default function Post(props) {
               // disabled
             />
             <Menu.Item leadingIcon="pencil" onPress={() => {}} title="Editar" />
-            <Menu.Item leadingIcon="delete" onPress={() => deletePost(props.room)} title="Borrar" />
+            <Menu.Item
+              leadingIcon="delete"
+              onPress={() => deletePost(props.room)}
+              title="Borrar"
+            />
             <Menu.Item
               leadingIcon="close-circle"
               onPress={() => {}}
