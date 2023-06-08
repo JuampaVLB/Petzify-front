@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { SafeAreaView, Text, View, StyleSheet, Button } from "react-native";
+import { SafeAreaView, View, StyleSheet } from "react-native";
 
 import Spinner from "react-native-loading-spinner-overlay";
 

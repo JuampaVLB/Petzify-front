@@ -80,8 +80,6 @@ export default function Post(props) {
             visible={visible}
             onDismiss={closeMenu}
             anchorPosition="bottom"
-            // contentStyle={{ backgroundColor: "red" }}
-            // style={{ backgroundColor: "purple" }}
             anchor={
               <Button onPress={openMenu}>
                 <SimpleLineIcons name="options" size={24} color="black" />

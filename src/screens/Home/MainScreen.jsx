@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Animated,
