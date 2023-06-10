@@ -105,7 +105,8 @@ export default function Post(props) {
             />
           </Menu>
         </View>
-        <Image source={dog} style={styles.image} />
+        <Image source={{uri: 'https://petzify.s3.sa-east-1.amazonaws.com/f3b15b7a-a0c8-4b3b-8aea-d7f745adf07f.jpeg'}}
+       style={{width: 400, height: 400}} />
       </View>
       <View style={styles.bottom}>
         <View style={styles.desc}>

@@ -30,6 +30,14 @@ import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import profile from "../../assets/img/dog.jpeg";
 
+import { S3 } from "aws-sdk";
+
+const s3 = new S3({
+  accessKeyId: "AKIAW5QYJ5MXNPZGVRC4",
+  secretAccessKey: "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",
+  region: "sa-east-1",
+});
+
 export default function Post({ estado, setEstado }) {
   const { userData } = useContext(UserContext);
   const handleCloseModal = () => {
@@ -56,6 +64,8 @@ export default function Post({ estado, setEstado }) {
 
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
+  const [filename1, setFilename1] = useState("");
+  const [blob1, setBlob1] = useState("");
 
   const socket = io("https://petzify.up.railway.app/");
 
@@ -63,6 +73,28 @@ export default function Post({ estado, setEstado }) {
   // http://192.168.0.2:5000
 
   const handlePost = () => {
+    if (filename1.length > 1) {
+      const params = {
+        Bucket: "petzify",
+        Key: filename1,
+        Body: blob1,
+        ContentType: "image/jpeg",
+      };
+
+      s3.upload(params, (err, data) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        console.log("Imagen subida exitosamente:", data.Location);
+        setFilename1("");
+        setBlob1("");
+      });
+    } else {
+      console.log("no subiste imagenes");
+    }
+
     postApi
       .post("/send/post", {
         username: userData.username,
@@ -100,7 +132,24 @@ export default function Post({ estado, setEstado }) {
     const result = await ImagePicker.launchImageLibraryAsync();
 
     if (!result.canceled) {
-      console.log(result);
+      if (Array.isArray(result.assets) && result.assets.length > 0) {
+        const selectedAsset = result.assets[0];
+        const imageUrl = selectedAsset.uri;
+        const fileName = selectedAsset.uri.split("/").pop();
+
+        console.log("file name: " + fileName);
+        console.log("image url:  " + imageUrl);
+
+        try {
+          const response = await fetch(result.assets[0].uri);
+          const blob = await response.blob();
+
+          setFilename1(fileName);
+          setBlob1(blob);
+        } catch (error) {
+          console.log("Error fetching image:", error);
+        }
+      }
     }
   };
 
@@ -141,9 +190,7 @@ export default function Post({ estado, setEstado }) {
                 <TouchableOpacity style={styles.btn_img} onPress={handleImage}>
                   <Ionicons name="image-outline" size={34} color="green" />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.btn_img}
-                >
+                <TouchableOpacity style={styles.btn_img}>
                   <MaterialIcons name="tag-faces" size={34} color="green" />
                 </TouchableOpacity>
               </View>
