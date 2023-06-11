@@ -67,12 +67,14 @@ export default function Post({ estado, setEstado }) {
   const [filename1, setFilename1] = useState("");
   const [blob1, setBlob1] = useState("");
 
-  const socket = io("https://petzify.up.railway.app/");
+  const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
 
   const handlePost = () => {
+    var img1 = "";
+
     if (filename1.length > 1) {
       const params = {
         Bucket: "petzify",
@@ -87,38 +89,63 @@ export default function Post({ estado, setEstado }) {
           return;
         }
 
-        console.log("Imagen subida exitosamente:", data.Location);
+        img1 = data.Location;
+        console.log(img1);
+        // console.log("Imagen subida exitosamente: ", data.Location);
         setFilename1("");
         setBlob1("");
+
+        postApi
+          .post("/send/post", {
+            username: userData.username,
+            title: title,
+            desc: desc,
+            image: img1,
+          })
+          .then((res) => {
+            Success("Posteo Creado Perfectamente");
+            socket.emit("client:post", true);
+            setDesc("");
+            setTitle("");
+
+            // handleCloseModal();
+          })
+          .catch((error) => {
+            if (error.response.data.length >= 1) {
+              Danger(error.response.data[0].message);
+              // handleCloseModal();
+            } else {
+              Danger(error.response.data.message);
+            }
+          });
       });
     } else {
       console.log("no subiste imagenes");
-    }
+      postApi
+        .post("/send/post", {
+          username: userData.username,
+          title: title,
+          desc: desc,
+        })
+        .then((res) => {
+          Success("Posteo Creado Perfectamente");
+          socket.emit("client:post", true);
+          setDesc("");
+          setTitle("");
 
-    postApi
-      .post("/send/post", {
-        username: userData.username,
-        title: title,
-        desc: desc,
-      })
-      .then((res) => {
-        Success("Posteo Creado Perfectamente");
-        socket.emit("client:post", true);
-        setDesc("");
-        setTitle("");
-
-        // handleCloseModal();
-      })
-      .catch((error) => {
-        if (error.response.data.length >= 1) {
-          // Alert.alert(error.response.data[0].message);
-          Danger(error.response.data[0].message);
           // handleCloseModal();
-        } else {
-          // Alert.alert(error.response.data.message);
-          Danger(error.response.data.message);
-        }
-      });
+        })
+        .catch((error) => {
+          if (error.response.data.length >= 1) {
+            // Alert.alert(error.response.data[0].message);
+            Danger(error.response.data[0].message);
+            // handleCloseModal();
+          } else {
+            // Alert.alert(error.response.data.message);
+            Danger(error.response.data.message);
+          }
+        });
+    }
   };
 
   const handleImage = async () => {

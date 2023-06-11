@@ -23,7 +23,7 @@ import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
 
 const MainScreen = () => {
-  const socket = io("https://petzify.up.railway.app/");
+  const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
@@ -126,6 +126,7 @@ const MainScreen = () => {
             desc={post.desc}
             index={posts.length === index + 1 ? true : false}
             room={post.room}
+            image={post.image}
           />
         ))}
       </ScrollView>
