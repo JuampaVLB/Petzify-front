@@ -128,7 +128,8 @@ export default function Post({ estado, setEstado }) {
           desc: desc,
         })
         .then((res) => {
-          Success("Posteo Creado Perfectamente");
+          // Success("Posteo Creado Perfectamente");
+          // alert.Alert("post creado");
           socket.emit("client:post", true);
           setDesc("");
           setTitle("");

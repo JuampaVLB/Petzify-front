@@ -8,7 +8,7 @@ export const UserContext = createContext();
 // Crea el proveedor del contexto
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
-
+  console.log("userdata ejecutando");
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
       {children}

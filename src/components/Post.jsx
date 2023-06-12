@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
 // Components
@@ -15,6 +16,7 @@ import {
 import { UserContext } from "../UserContext";
 import ModalComments from "./ModalComments";
 import { Button, Menu } from "react-native-paper";
+import io from "socket.io-client";
 import { postApi } from "../api/post";
 
 // Assets
@@ -27,6 +29,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 export default function Post(props) {
+  const socket = io("http://192.168.0.3:5000");
+
   const [modalVisible, setModalVisible] = useState(false);
   const [room, setRoom] = useState("");
   const { userData } = useContext(UserContext);
@@ -47,16 +51,29 @@ export default function Post(props) {
   const closeMenu = () => setVisible(false);
 
   const deletePost = (room) => {
-    console.log("borraste el posteo" + room);
+    Alert.alert("Alert Title", "My Alert Msg", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          console.log("borraste el posteo" + room);
 
-    postApi
-      .delete(`/p/b7d8b47f-307d-4680-aa07-cca58e00b5d5`)
-      .then((res) => {
-        console.log("se borro bien");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          postApi
+            .delete(`/p/${room}`)
+            .then((res) => {
+              console.log("se borro bien");
+              socket.emit("client:post", true);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        },
+      },
+    ]);
   };
 
   return (
@@ -105,8 +122,7 @@ export default function Post(props) {
             />
           </Menu>
         </View>
-        <Image source={{uri: props.image}}
-       style={{width: 400, height: 400}} />
+        <Image source={{ uri: props.image }} style={styles.image} />
       </View>
       <View style={styles.bottom}>
         <View style={styles.desc}>
@@ -226,5 +242,10 @@ const styles = StyleSheet.create({
   },
   lastPost: {
     marginBottom: 55,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
 });

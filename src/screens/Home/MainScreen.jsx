@@ -69,7 +69,7 @@ const MainScreen = () => {
   const animatebtn = () => {
     Animated.timing(buttonOpacity, {
       toValue: showButtons ? 1 : 0,
-      duration: 200,
+      // duration: 100,
       useNativeDriver: true,
     }).start();
   };
@@ -107,6 +107,13 @@ const MainScreen = () => {
 
   const { height } = Dimensions.get("window");
 
+  const [reversedPosts, setReversedPosts] = useState([]);
+
+  useEffect(() => {
+    // Invertir el orden de los posts y almacenarlo en reversedPosts
+    setReversedPosts(posts.slice().reverse());
+  }, [posts]);
+
   return (
     // <AlertNotificationRoot theme="dark">
 
@@ -117,14 +124,14 @@ const MainScreen = () => {
         snapToInterval={height - 50 - 60}
         decelerationRate="fast"
       >
-        {posts.map((post, index) => (
+        {reversedPosts.map((post, index) => (
           <Post
             key={post._id}
             imageURL="run"
             username={post.username}
             title={post.title}
             desc={post.desc}
-            index={posts.length === index + 1 ? true : false}
+            index={reversedPosts.length === index + 1 ? true : false}
             room={post.room}
             image={post.image}
           />
