@@ -110,13 +110,10 @@ const MainScreen = () => {
   const [reversedPosts, setReversedPosts] = useState([]);
 
   useEffect(() => {
-    // Invertir el orden de los posts y almacenarlo en reversedPosts
     setReversedPosts(posts.slice().reverse());
   }, [posts]);
 
   return (
-    // <AlertNotificationRoot theme="dark">
-
     <View style={styles.container}>
       <ScrollView
         style={styles.scroll}
@@ -160,8 +157,6 @@ const MainScreen = () => {
         <ModalPost estado={modalVisible} setEstado={setModalVisible} />
       </View>
     </View>
-
-    // </AlertNotificationRoot>
   );
 };
 
