@@ -1,9 +1,19 @@
-import React from 'react'
-import { View, Text } from 'react-native';
+import React, { useEffect, useState, useRef, useContext } from "react";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+
+import ModalPet from "../../components/ModalPet";
 
 const MyPet = () => {
+
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
-    <View>
+    <View style={styles.container}>
         <Text
         style={{
           alignSelf: "center",
@@ -13,8 +23,31 @@ const MyPet = () => {
         >
             My Pet
         </Text>
+        <TouchableOpacity style={styles.add}>
+          <Text style={{fontSize: 32, color: "white"}}>
+            +
+          </Text>
+        </TouchableOpacity>
+        <ModalPet setEstado={setModalVisible} estado={modalVisible} />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    minHeight: "100%",
+    position: "relative",
+  },
+  add: {
+    position: "absolute",
+    right: 0,
+    bottom: 100,
+    margin: 15,
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: "green",
+  }
+});
 
 export default MyPet;

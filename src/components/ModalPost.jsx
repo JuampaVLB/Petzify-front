@@ -9,6 +9,7 @@ import {
   Modal,
   TextInput,
   Image,
+  alert,
 } from "react-native";
 
 // Components
@@ -17,11 +18,11 @@ import { UserContext } from "../UserContext";
 import { postApi } from "../api/post";
 import * as ImagePicker from "expo-image-picker";
 import io from "socket.io-client";
-import {
-  ALERT_TYPE,
-  Dialog,
-  AlertNotificationRoot,
-} from "react-native-alert-notification";
+// import {
+//   ALERT_TYPE,
+//   Dialog,
+//   AlertNotificationRoot,
+// } from "react-native-alert-notification";
 
 // Assets
 
@@ -44,30 +45,30 @@ export default function Post({ estado, setEstado }) {
     setEstado(false);
   };
 
-  const Danger = (str) => {
-    Dialog.show({
-      type: ALERT_TYPE.DANGER,
-      title: "Danger",
-      textBody: str,
-      button: "close",
-    });
-  };
+  // const Danger = (str) => {
+  //   Dialog.show({
+  //     type: ALERT_TYPE.DANGER,
+  //     title: "Danger",
+  //     textBody: str,
+  //     button: "close",
+  //   });
+  // };
 
-  const Success = (str) => {
-    Dialog.show({
-      type: ALERT_TYPE.SUCCESS,
-      title: "Success",
-      textBody: str,
-      button: "close",
-    });
-  };
+  // const Success = (str) => {
+  //   Dialog.show({
+  //     type: ALERT_TYPE.SUCCESS,
+  //     title: "Success",
+  //     textBody: str,
+  //     button: "close",
+  //   });
+  // };
 
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
   const [filename1, setFilename1] = useState("");
   const [blob1, setBlob1] = useState("");
 
-  const socket = io("http://192.168.0.3:5000");
+  const socket = io("https://petzify.up.railway.app");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
@@ -103,19 +104,20 @@ export default function Post({ estado, setEstado }) {
             image: img1,
           })
           .then((res) => {
-            Success("Posteo Creado Perfectamente");
+            // Success("Posteo Creado Perfectamente");
+            // Alert.alert("Posteo Creado Correctamente!");
             socket.emit("client:post", true);
             setDesc("");
             setTitle("");
 
-            // handleCloseModal();
+            handleCloseModal();
           })
           .catch((error) => {
             if (error.response.data.length >= 1) {
-              Danger(error.response.data[0].message);
+              // Danger(error.response.data[0].message);
               // handleCloseModal();
             } else {
-              Danger(error.response.data.message);
+              // Danger(error.response.data.message);
             }
           });
       });
@@ -188,7 +190,6 @@ export default function Post({ estado, setEstado }) {
       visible={estado}
       onRequestClose={handleCloseModal}
     >
-      <AlertNotificationRoot theme="dark">
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.account_info}>
@@ -239,7 +240,6 @@ export default function Post({ estado, setEstado }) {
             </TouchableOpacity>
           </View>
         </View>
-      </AlertNotificationRoot>
     </Modal>
   );
 }

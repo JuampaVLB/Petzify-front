@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,15 +11,15 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { UserContext } from '../UserContext';
+import { UserContext } from "../UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 import dog from "../../assets/img/dog.jpeg";
 
 const CustomDrawer = (props) => {
-
   const { userData, setUserData } = useContext(UserContext);
+  const [role, setRole] = useState("");
   const navigation = useNavigation();
 
   const YesOrNo = () => {
@@ -34,45 +34,18 @@ const CustomDrawer = (props) => {
         onPress: async () => {
           await AsyncStorage.removeItem("TokenJWT");
           setUserData({});
-         navigation.navigate("Login");
+          navigation.navigate("Login");
         },
       },
     ]);
   };
 
-  // const GetToken = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem("TokenJWT");
-
-  //     let headers = {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //       "auth-token": value,
-  //     };
-
-  //     authApi
-  //       .get("/profile", {
-  //         headers: headers,
-  //       })
-  //       .then((res) => {
-  //         setData(res.data.user);
-  //         console.log("data es: " + res.data.user);
-  //         if (res.data.user.role === "user") setRole("Usuario");
-  //         if (res.data.user.role === "institution") setRole("Institucion");
-  //         if (res.data.user.role === "business") setRole("Negocio");
-  //         if (res.data.user.role === "admin") setRole("Administrador");
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   GetToken();
-  // }, []);
-
+  useEffect(() => {
+    if (userData.role === "user") setRole("Usuario");
+    if (userData.role === "institution") setRole("Institucion");
+    if (userData.role === "business") setRole("Negocio");
+    if (userData.role === "admin") setRole("Administrador");
+  }, [userData])
 
   return (
     <View style={{ flex: 5 }}>
@@ -81,7 +54,7 @@ const CustomDrawer = (props) => {
         <View style={styles.data}>
           <Text style={styles.text}>{userData.username}</Text>
           <Text style={styles.text}>Seguidores: 200</Text>
-          <Text style={styles.type}>{userData.role}</Text>
+          <Text style={styles.type}>{role}</Text>
         </View>
       </View>
       <DrawerContentScrollView {...props} style={styles.menu}>

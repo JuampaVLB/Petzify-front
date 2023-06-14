@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, Image, TextInput } from "react-native";
 // Components
 
 import { UserContext } from "../../UserContext";
-import { ProgressBar, Colors } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 
 // Assets
 

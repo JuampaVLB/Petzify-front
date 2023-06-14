@@ -23,7 +23,7 @@ import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
 
 const MainScreen = () => {
-  const socket = io("http://192.168.0.3:5000");
+  const socket = io("https://petzify.up.railway.app");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
@@ -69,7 +69,7 @@ const MainScreen = () => {
   const animatebtn = () => {
     Animated.timing(buttonOpacity, {
       toValue: showButtons ? 1 : 0,
-      // duration: 100,
+      duration: 100,
       useNativeDriver: true,
     }).start();
   };

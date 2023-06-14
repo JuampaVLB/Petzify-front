@@ -29,7 +29,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 export default function Post(props) {
-  const socket = io("http://192.168.0.3:5000");
+  const socket = io("https://petzify.up.railway.app");
 
   const [modalVisible, setModalVisible] = useState(false);
   const [room, setRoom] = useState("");
@@ -51,7 +51,7 @@ export default function Post(props) {
   const closeMenu = () => setVisible(false);
 
   const deletePost = (room) => {
-    Alert.alert("Alert Title", "My Alert Msg", [
+    Alert.alert("Cerrar Sesion", "Estas seguro no podras volver atras!", [
       {
         text: "Cancel",
         onPress: () => console.log("Cancel Pressed"),
@@ -109,17 +109,30 @@ export default function Post(props) {
               title="Compartir"
               // disabled
             />
-            <Menu.Item leadingIcon="pencil" onPress={() => {}} title="Editar" />
-            <Menu.Item
-              leadingIcon="delete"
-              onPress={() => deletePost(props.room)}
-              title="Borrar"
-            />
-            <Menu.Item
-              leadingIcon="close-circle"
-              onPress={() => {}}
-              title="Dejar de seguir"
-            />
+
+            {props.username === userData.username ? (
+              <Menu.Item
+                leadingIcon="pencil"
+                onPress={() => {}}
+                title="Editar"
+              />
+            ) : null}
+
+            {props.username === userData.username ? (
+              <Menu.Item
+                leadingIcon="delete"
+                onPress={() => deletePost(props.room)}
+                title="Borrar"
+              />
+            ) : null}
+
+            {props.username != userData.username ? (
+              <Menu.Item
+                leadingIcon="close-circle"
+                onPress={() => {}}
+                title="Dejar de seguir"
+              />
+            ) : null}
           </Menu>
         </View>
         <Image source={{ uri: props.image }} style={styles.image} />
