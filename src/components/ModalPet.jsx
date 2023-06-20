@@ -20,14 +20,30 @@ import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 
 const ModalPet = ({ setEstado, estado }) => {
+  const [name, setName] = useState("");
+  const [breed, setBreed] = useState("");
+  const [genre, setGenre] = useState("male");
+  const [size, setSize] = useState("");
+  const [collar, setCollar] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
-  const [role, setRole] = useState(null);
 
-  const data = [
-    { label: "Pequeño", value: "user" },
-    { label: "Mediano", value: "business" },
-    { label: "Grande", value: "institution" },
-    { label: "Muy Grande", value: "institution" },
+  const data_breed = [
+    { label: "Labrador", value: "Labrador" },
+    { label: "Bulldog francés", value: "Bulldog francés" },
+    { label: "Golden", value: "Golden" },
+    { label: "Pastor alemán", value: "Pastor alemán" },
+    { label: "Caniche", value: "Caniche" },
+    { label: "Bulldog", value: "Bulldog" },
+    { label: "Beagle", value: "Beagle" },
+    { label: "Rottweiler", value: "Rottweiler" },
+    { label: "Desconocido", value: "Desconocido" },
+  ];
+
+  const data_size = [
+    { label: "Pequeño", value: "small" },
+    { label: "Mediano", value: "medium" },
+    { label: "Grande", value: "big" },
+    { label: "Muy Grande", value: "verybig" },
   ];
 
   const handleImage = async () => {
@@ -41,7 +57,11 @@ const ModalPet = ({ setEstado, estado }) => {
     const result = await ImagePicker.launchImageLibraryAsync();
 
     if (!result.canceled) {
-      console.log("acepto");
+      console.log(
+        `
+      hola como estas
+      `
+      );
     }
 
     // if (!result.canceled) {
@@ -66,6 +86,30 @@ const ModalPet = ({ setEstado, estado }) => {
     // }
   };
 
+  const Reset = () => {
+    setName("");
+    setBreed("");
+    setSize("");
+    setGenre("male");
+    setCollar(false);
+  }
+
+  const handleSubmit = () => {
+    console.log(
+      `
+      Owner: Test,
+      Name: ${name}
+      Breed: ${breed}
+      Size: ${size}
+      Genre: ${genre}
+      Collar: ${collar}
+      `
+    );
+
+
+
+  };
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -84,34 +128,58 @@ const ModalPet = ({ setEstado, estado }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Nombre"
-                // defaultValue={title}
-                // onChangeText={(newText) => setTitle(newText)}
+                defaultValue={name}
+                onChangeText={(newText) => setName(newText)}
               />
               <View style={styles.box}>
-                <TextInput
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    styles.input_raza,
+                    isFocus && { borderColor: "blue" },
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={data_breed}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Raza"
+                  searchPlaceholder="Buscar..."
+                  value={breed}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    setBreed(item.value);
+                    setIsFocus(false);
+                  }}
+                />
+                {/* <TextInput
                   style={styles.input_raza}
                   placeholder="Raza"
-                  // defaultValue={title}
-                  // onChangeText={(newText) => setTitle(newText)}
-                />
+                  defaultValue={breed}
+                  onChangeText={(newText) => setBreed(newText)}
+                /> */}
                 <Dropdown
                   style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  data={data}
-                  search
+                  data={data_size}
                   maxHeight={300}
                   labelField="label"
                   valueField="value"
                   placeholder="Tamaño"
                   searchPlaceholder="Buscar..."
-                  value={role}
+                  value={size}
                   onFocus={() => setIsFocus(true)}
                   onBlur={() => setIsFocus(false)}
                   onChange={(item) => {
-                    setRole(item.value);
+                    setSize(item.value);
                     setIsFocus(false);
                   }}
                 />
@@ -128,19 +196,16 @@ const ModalPet = ({ setEstado, estado }) => {
                 <Text>Genero</Text>
                 <SwitchSelector
                   initial={0}
-                  // onPress={(value) => this.setState({ gender: value })}
-                  textColor="#000" //'#7a44cf'
+                  onPress={(value) => setGenre(value)}
+                  textColor="#000"
                   selectedColor="#fff"
                   buttonColor="green"
                   borderColor="#ccc"
                   hasPadding
                   style={{ width: "100%" }}
                   options={[
-                    { label: "Feminino", value: "f" },
-                    {
-                      label: "Masculino",
-                      value: "m",
-                    },
+                    { label: "Masculino", value: "male" },
+                    { label: "Feminino", value: "female" },
                   ]}
                   testID="gender-switch-selector"
                   accessibilityLabel="gender-switch-selector"
@@ -150,7 +215,7 @@ const ModalPet = ({ setEstado, estado }) => {
                 <Text>Collar</Text>
                 <SwitchSelector
                   initial={0}
-                  // onPress={(value) => this.setState({ gender: value })}
+                  onPress={(value) => setCollar(value)}
                   textColor="#000" //'#7a44cf'
                   selectedColor="#fff"
                   buttonColor="green"
@@ -177,7 +242,10 @@ const ModalPet = ({ setEstado, estado }) => {
                     Cancelar
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn_submit}>
+                <TouchableOpacity
+                  style={styles.btn_submit}
+                  onPress={handleSubmit}
+                >
                   <Text style={{ color: "#fff", textAlign: "center" }}>
                     Agregar Mascota
                   </Text>
@@ -323,9 +391,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  inputSearchStyle: {
-    display: "none",
-  },
   box: {
     display: "flex",
     flexDirection: "row",
@@ -354,7 +419,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-  }
+  },
 });
 
 export default ModalPet;
