@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Modal,
@@ -15,9 +15,20 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //
 
+import { petApi } from "../api/pet";
 import SwitchSelector from "react-native-switch-selector";
 import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
+
+//
+
+import { S3 } from "aws-sdk";
+
+const s3 = new S3({
+  accessKeyId: "AKIAW5QYJ5MXNPZGVRC4",
+  secretAccessKey: "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",
+  region: "sa-east-1",
+});
 
 const ModalPet = ({ setEstado, estado }) => {
   const [name, setName] = useState("");
@@ -26,6 +37,9 @@ const ModalPet = ({ setEstado, estado }) => {
   const [size, setSize] = useState("");
   const [collar, setCollar] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
+
+  const [images, setImages] = useState([]);
+  const [blob1, setBlob1] = useState("");
 
   const data_breed = [
     { label: "Labrador", value: "Labrador" },
@@ -46,6 +60,10 @@ const ModalPet = ({ setEstado, estado }) => {
     { label: "Muy Grande", value: "verybig" },
   ];
 
+  const addNewElements = (data) => {
+    setImages((prevArray) => [...prevArray, data]);
+  };
+
   const handleImage = async () => {
     console.log("clicked image picker");
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -54,37 +72,51 @@ const ModalPet = ({ setEstado, estado }) => {
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync();
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+    });
 
     if (!result.canceled) {
-      console.log(
-        `
-      hola como estas
-      `
-      );
+      if (Array.isArray(result.assets) && result.assets.length > 0) {
+        const selectedAssets = result.assets;
+
+        for (let i = 0; i < selectedAssets.length; i++) {
+          const selectedAsset = selectedAssets[i];
+          const imageUrl = selectedAsset.uri;
+          const fileName = selectedAsset.uri.split("/").pop();
+
+          // console.log("file name: " + fileName);
+          // console.log("image url:  " + imageUrl);
+          // addNewElements({
+          //   filename: fileName,
+          //   url: imageUrl,
+          // });
+          const response = await fetch(result.assets[0].uri);
+          // const blob = await response.blob();
+          try {
+            
+
+            // console.log(blob[0]);
+
+            // setBlob1(blob);
+
+            addNewElements({
+              filename: fileName,
+              url: imageUrl,
+              // blob: "test",
+            });
+          } catch (error) {
+            console.log("Error fetching image:", error);
+          }
+        }
+      }
     }
-
-    // if (!result.canceled) {
-    //   if (Array.isArray(result.assets) && result.assets.length > 0) {
-    //     const selectedAsset = result.assets[0];
-    //     const imageUrl = selectedAsset.uri;
-    //     const fileName = selectedAsset.uri.split("/").pop();
-
-    //     console.log("file name: " + fileName);
-    //     console.log("image url:  " + imageUrl);
-
-    //     try {
-    //       const response = await fetch(result.assets[0].uri);
-    //       const blob = await response.blob();
-
-    //       setFilename1(fileName);
-    //       setBlob1(blob);
-    //     } catch (error) {
-    //       console.log("Error fetching image:", error);
-    //     }
-    //   }
-    // }
   };
+
+  useEffect(() => {
+    console.log("blob es: " + blob1);
+  }, [blob1]);
 
   const Reset = () => {
     setName("");
@@ -92,22 +124,65 @@ const ModalPet = ({ setEstado, estado }) => {
     setSize("");
     setGenre("male");
     setCollar(false);
-  }
+  };
 
   const handleSubmit = () => {
-    console.log(
-      `
-      Owner: Test,
-      Name: ${name}
-      Breed: ${breed}
-      Size: ${size}
-      Genre: ${genre}
-      Collar: ${collar}
-      `
-    );
+    // console.log(
+    //   `
+    //   Owner: Test,
+    //   Name: ${name}
+    //   Breed: ${breed}
+    //   Size: ${size}
+    //   Genre: ${genre}
+    //   Collar: ${collar}
+    //   `
+    // );
 
+    images.forEach((element, index) => {
+      console.log(
+        `
+        N: ${index}
+        filename: ${element.filename}
+        URL: ${element.url}
+        `
+      );
 
+      // let params = {
+      //   Bucket: "petzify",
+      //   Key: element.filename,
+      //   Body: blob1,
+      //   ContentType: "image/jpeg",
+      // };
+    });
 
+    setImages([]);
+
+    // s3.upload(params, (err, data) => {
+    //   if (err) {
+    //     console.log(err);
+    //     return;
+    //   }
+
+    //   img1 = data.Location;
+    //   console.log(img1);
+
+    petApi
+      .post("/create", {
+        owner: "juan probando",
+        name,
+        breed,
+        size,
+        genre,
+        collar,
+      })
+      .then(function (response) {
+        Alert.alert("mascota registrada en la base de datos");
+        Reset();
+      })
+      .catch(function (error) {
+        Alert.alert(error.response.data[0].message);
+        // Danger(error.response.data[0].message);
+      });
   };
 
   return (
@@ -223,10 +298,10 @@ const ModalPet = ({ setEstado, estado }) => {
                   hasPadding
                   style={{ width: "100%" }}
                   options={[
-                    { label: "No", value: "false" },
+                    { label: "No", value: false },
                     {
                       label: "Si",
-                      value: "true",
+                      value: true,
                     },
                   ]}
                   testID="gender-switch-selector"
