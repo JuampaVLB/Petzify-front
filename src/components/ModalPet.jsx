@@ -39,7 +39,6 @@ const ModalPet = ({ setEstado, estado }) => {
   const [isFocus, setIsFocus] = useState(false);
 
   const [images, setImages] = useState([]);
-  const [blob1, setBlob1] = useState("");
 
   const data_breed = [
     { label: "Labrador", value: "Labrador" },
@@ -82,29 +81,17 @@ const ModalPet = ({ setEstado, estado }) => {
         const selectedAssets = result.assets;
 
         for (let i = 0; i < selectedAssets.length; i++) {
-          const selectedAsset = selectedAssets[i];
-          const imageUrl = selectedAsset.uri;
-          const fileName = selectedAsset.uri.split("/").pop();
-
-          // console.log("file name: " + fileName);
-          // console.log("image url:  " + imageUrl);
-          // addNewElements({
-          //   filename: fileName,
-          //   url: imageUrl,
-          // });
-          const response = await fetch(result.assets[0].uri);
-          // const blob = await response.blob();
+          let selectedAsset = selectedAssets[i];
+          let imageUrl = selectedAsset.uri;
+          let fileName = selectedAsset.uri.split("/").pop();
           try {
-            
-
-            // console.log(blob[0]);
-
-            // setBlob1(blob);
+            let response = await fetch(selectedAsset.uri);
+            let blob = await response.blob();
 
             addNewElements({
               filename: fileName,
               url: imageUrl,
-              // blob: "test",
+              blob,
             });
           } catch (error) {
             console.log("Error fetching image:", error);
@@ -113,10 +100,6 @@ const ModalPet = ({ setEstado, estado }) => {
       }
     }
   };
-
-  useEffect(() => {
-    console.log("blob es: " + blob1);
-  }, [blob1]);
 
   const Reset = () => {
     setName("");
@@ -127,44 +110,26 @@ const ModalPet = ({ setEstado, estado }) => {
   };
 
   const handleSubmit = () => {
-    // console.log(
-    //   `
-    //   Owner: Test,
-    //   Name: ${name}
-    //   Breed: ${breed}
-    //   Size: ${size}
-    //   Genre: ${genre}
-    //   Collar: ${collar}
-    //   `
-    // );
-
     images.forEach((element, index) => {
-      console.log(
-        `
-        N: ${index}
-        filename: ${element.filename}
-        URL: ${element.url}
-        `
-      );
+      let img = "";
 
-      // let params = {
-      //   Bucket: "petzify",
-      //   Key: element.filename,
-      //   Body: blob1,
-      //   ContentType: "image/jpeg",
-      // };
+      let params = {
+        Bucket: "petzify",
+        Key: element.filename,
+        Body: element.blob,
+        ContentType: "image/jpeg",
+      };
+
+      s3.upload(params, (err, data) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        img = data.Location;
+        console.log(img);
+      });
     });
-
-    setImages([]);
-
-    // s3.upload(params, (err, data) => {
-    //   if (err) {
-    //     console.log(err);
-    //     return;
-    //   }
-
-    //   img1 = data.Location;
-    //   console.log(img1);
 
     petApi
       .post("/create", {
@@ -172,18 +137,25 @@ const ModalPet = ({ setEstado, estado }) => {
         name,
         breed,
         size,
+        photos: images,
         genre,
         collar,
       })
       .then(function (response) {
         Alert.alert("mascota registrada en la base de datos");
+        setImages([]);
         Reset();
       })
       .catch(function (error) {
         Alert.alert(error.response.data[0].message);
+        setImages([]);
         // Danger(error.response.data[0].message);
       });
   };
+
+  useEffect(() => {
+    console.log(images);
+  }, [images]);
 
   return (
     <View style={styles.centeredView}>
