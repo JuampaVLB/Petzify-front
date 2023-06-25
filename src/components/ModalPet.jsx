@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Alert,
   Modal,
@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
 } from "react-native";
-
+import { UserContext } from "../UserContext";
 //
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -31,6 +31,7 @@ const s3 = new S3({
 });
 
 const ModalPet = ({ setEstado, estado }) => {
+  const { userData } = useContext(UserContext);
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
   const [genre, setGenre] = useState("male");
@@ -39,6 +40,7 @@ const ModalPet = ({ setEstado, estado }) => {
   const [isFocus, setIsFocus] = useState(false);
 
   const [images, setImages] = useState([]);
+  const [responseImages, setResponse] = useState([]);
 
   const data_breed = [
     { label: "Labrador", value: "Labrador" },
@@ -58,6 +60,11 @@ const ModalPet = ({ setEstado, estado }) => {
     { label: "Grande", value: "big" },
     { label: "Muy Grande", value: "verybig" },
   ];
+
+  const addNewLocations = (data) => {
+    setResponse((prevArray) => [...prevArray, data]);
+    console.log(responseImages);
+  };
 
   const addNewElements = (data) => {
     setImages((prevArray) => [...prevArray, data]);
@@ -110,52 +117,69 @@ const ModalPet = ({ setEstado, estado }) => {
   };
 
   const handleSubmit = () => {
-    images.forEach((element, index) => {
-      let img = "";
+    if (images.length < 2) {
+      Alert.alert("faltan imagenes");
+    } else {
+      petApi
+        .post("/create", {
+          owner: userData.username,
+          name,
+          breed,
+          size,
+          genre,
+          collar,
+        })
+        .then(function (response) {
+          images.forEach((element, index) => {
+            let img = "";
 
-      let params = {
-        Bucket: "petzify",
-        Key: element.filename,
-        Body: element.blob,
-        ContentType: "image/jpeg",
-      };
+            let params = {
+              Bucket: "petzify",
+              Key: element.filename,
+              Body: element.blob,
+              ContentType: "image/jpeg",
+            };
 
-      s3.upload(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
+            s3.upload(params, (err, data) => {
+              if (err) {
+                console.log(err);
+                return;
+              }
 
-        img = data.Location;
-        console.log(img);
-      });
-    });
-
-    petApi
-      .post("/create", {
-        owner: "juan probando",
-        name,
-        breed,
-        size,
-        photos: images,
-        genre,
-        collar,
-      })
-      .then(function (response) {
-        Alert.alert("mascota registrada en la base de datos");
-        setImages([]);
-        Reset();
-      })
-      .catch(function (error) {
-        Alert.alert(error.response.data[0].message);
-        setImages([]);
-        // Danger(error.response.data[0].message);
-      });
+              img = data.Location;
+              addNewLocations(img);
+              console.log(img);
+            });
+          });
+          petApi
+            .post("/addImage", {
+              id: response.data.savedPet._id,
+              photos: responseImages,
+            })
+            .then((res) => {
+              Alert.alert("mascota registrada en la base de datos");
+              console.log(response.data.savedPet._id);
+              console.log(responseImages);
+              setImages([]);
+              setResponse([]);
+              Reset();
+            })
+            .catch((err) => {
+              setImages([]);
+              setResponse([]);
+              Reset();
+            });
+          setImages([]);
+          setResponse([]);
+          Reset();
+        })
+        .catch(function (error) {
+          Alert.alert(error.response.data[0].message);
+          setImages([]);
+          setResponse([]);
+        });
+    }
   };
-
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   return (
     <View style={styles.centeredView}>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 import ModalPet from "../../components/ModalPet";
 
