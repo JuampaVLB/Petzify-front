@@ -2,7 +2,7 @@
 
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
-
+import Cardpet from "../../components/Cardpet";
 
 // Components
 
@@ -83,7 +83,9 @@ const Profile = () => {
         </View>
       </View>
       <View style={styles.informacion}>
-        <View style={styles.muro}></View>
+        <Cardpet />
+        <View style={styles.muro}>
+        </View>
         <TextInput style={styles.input} placeholder="Responder..." />
       </View>
     </View>
@@ -157,18 +159,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     backgroundColor: "gray",
-    display: "none",
   },
   muro: {
     width: "80%",
     maxHeight: "70%",
-    backgroundColor: "#fff",
     flex: 1,
     resizeMode: "cover",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
+    display: "none"
   },
   input: {
     borderWidth: 1,
@@ -178,6 +179,7 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "80%",
     backgroundColor: "white",
+    display: "none"
   },
 });
 
