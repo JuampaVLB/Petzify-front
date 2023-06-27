@@ -7,7 +7,7 @@ import Cardpet from "../../components/Cardpet";
 // Components
 
 import { UserContext } from "../../UserContext";
-import { ProgressBar } from 'react-native-paper';
+import { ProgressBar } from "react-native-paper";
 
 // Assets
 
@@ -83,9 +83,10 @@ const Profile = () => {
         </View>
       </View>
       <View style={styles.informacion}>
-        <Cardpet />
-        <View style={styles.muro}>
-        </View>
+        <Cardpet name="Luna" owner="JuampaVLB" />
+        <Cardpet name="Oddy" owner="JuampaVLB" />
+        <Cardpet name="Bella" owner="JuampaVLB" />
+        <View style={styles.muro}></View>
         <TextInput style={styles.input} placeholder="Responder..." />
       </View>
     </View>
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
-    display: "none"
+    display: "none",
   },
   input: {
     borderWidth: 1,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "80%",
     backgroundColor: "white",
-    display: "none"
+    display: "none",
   },
 });
 
