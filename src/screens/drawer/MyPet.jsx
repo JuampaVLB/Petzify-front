@@ -11,6 +11,7 @@ import {
 import { petApi } from "../../api/pet";
 import ModalPet from "../../components/ModalPet";
 
+import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 import { UserContext } from "../../UserContext";
@@ -26,18 +27,17 @@ const MyPet = () => {
   const getPets = () => {
     petApi
       .get(`/${userData.username}`)
-      // ACA VA EL NAME
       .then((res) => {
         // res.data.searchPets.length | Cantidad de PERROS
         // console.log(res.data.searchPets[0]);
         setPet(res.data.searchPets);
 
-        // if (pet[count].size == "verybig") {
-        //   setSize("Muy Grande");
-        // }
-        // if (pet[count].size === "big") setSize("Grande");
-        // if (pet[count].size === "medium") setSize("Mediano");
-        // if (pet[count].size === "small") setSize("Pequeño");
+        if (pet[count].size == "verybig") {
+          setSize("Muy Grande");
+        }
+        if (pet[count].size === "big") setSize("Grande");
+        if (pet[count].size === "medium") setSize("Mediano");
+        if (pet[count].size === "small") setSize("Pequeño");
 
         setLoading(false);
       })
@@ -48,18 +48,19 @@ const MyPet = () => {
   };
 
   useEffect(() => {
-    console.log("hola");
-    if (pet[count].size == "verybig") {
-      setSize("Muy Grande");
-    }
-    if (pet[count].size === "big") setSize("Grande");
-    if (pet[count].size === "medium") setSize("Mediano");
-    if (pet[count].size === "small") setSize("Pequeño");
-  }, [count]);
-
-  useEffect(() => {
     getPets();
   }, []);
+
+  useEffect(() => {
+    if (pet.length > 0) {
+      if (pet[count].size == "verybig") {
+        setSize("Muy Grande");
+      }
+      if (pet[count].size === "big") setSize("Grande");
+      if (pet[count].size === "medium") setSize("Mediano");
+      if (pet[count].size === "small") setSize("Pequeño");
+    }
+  }, [count]);
 
   if (loading) {
     return (
@@ -70,31 +71,49 @@ const MyPet = () => {
   }
 
   const Next = () => {
+    console.log("pet length: " + pet.length + " count: " + count);
     setCount(count + 1);
     console.log("count es: " + count);
+    if(count === pet.length-1) {
+      setCount(0);
+    }
   };
 
   const Prev = () => {
-    setCount(count - 1);
-    console.log("count es: " + count);
+      setCount(count - 1);
+      console.log("count es: " + count);
+      if(count === 0) {
+        setCount(pet.length-1);
+      }
   };
 
   return (
     <View style={styles.container}>
-      {pet ? (
+      {pet.length >= 1 ? (
         <View style={styles.content}>
           <Image source={{ uri: pet[count].photos[1] }} style={styles.banner} />
           <Image
             source={{ uri: pet[count].photos[0] }}
             style={styles.image_profile}
           />
+          {pet.length >= 2 ? (
+            <>
+              <TouchableOpacity
+                onPress={Prev}
+                style={[styles.arrows, styles.arrow_left]}
+              >
+                <AntDesign name="arrowleft" size={24} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={Next}
+                style={[styles.arrows, styles.arrow_right]}
+              >
+                <AntDesign name="arrowright" size={24} color="white" />
+              </TouchableOpacity>
+            </>
+          ) : null}
+
           <Text style={styles.name}>{pet[count].name}</Text>
-          <TouchableOpacity onPress={Next}>
-            <Text>Siguente</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={Prev}>
-            <Text>Anterior</Text>
-          </TouchableOpacity>
           <View style={styles.info}>
             <View style={styles.left}>
               <Text style={[styles.center, styles.title]}>Tamaño</Text>
@@ -114,29 +133,29 @@ const MyPet = () => {
             <View style={styles.images}>
               <View style={styles.div}>
                 <Image
-                  source={{ uri: pet[0].photos[2] }}
+                  source={{ uri: pet[count].photos[2] }}
                   style={styles.picture}
                 />
                 <Image
-                  source={{ uri: pet[0].photos[2] }}
+                  source={{ uri: pet[count].photos[2] }}
                   style={styles.picture}
                 />
                 <Image
-                  source={{ uri: pet[0].photos[2] }}
+                  source={{ uri: pet[count].photos[2] }}
                   style={styles.picture}
                 />
               </View>
               <View style={styles.div}>
                 <Image
-                  source={{ uri: pet[0].photos[2] }}
+                  source={{ uri: pet[count].photos[2] }}
                   style={styles.picture}
                 />
                 <Image
-                  source={{ uri: pet[0].photos[2] }}
+                  source={{ uri: pet[count].photos[2] }}
                   style={styles.picture}
                 />
                 <Image
-                  source={{ uri: pet[0].photos[2] }}
+                  source={{ uri: pet[count].photos[2] }}
                   style={styles.picture}
                 />
               </View>
@@ -167,6 +186,27 @@ const styles = StyleSheet.create({
     minHeight: "100%",
     position: "relative",
     alignItems: "center",
+  },
+  arrows: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    maxHeight: 55,
+    maxWidth: 55,
+    marginTop: "58%",
+    zIndex: 100,
+    backgroundColor: "green",
+    padding: 15,
+    borderRadius: 25,
+  },
+  arrow_left: {
+    marginLeft: -10,
+    left: 0,
+  },
+  arrow_right: {
+    marginRight: -10,
+    right: 0,
   },
   content: {
     width: "90%",

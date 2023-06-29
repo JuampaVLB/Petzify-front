@@ -117,9 +117,9 @@ const ModalPet = ({ setEstado, estado }) => {
   };
 
   const handleSubmit = () => {
-    if (images.length < 2) {
-      Alert.alert("faltan imagenes");
-    } else {
+    // if (images.length < 2) {
+      // Alert.alert("faltan imagenes");
+    // } else {
       petApi
         .post("/create", {
           owner: userData.username,
@@ -178,7 +178,7 @@ const ModalPet = ({ setEstado, estado }) => {
           setImages([]);
           setResponse([]);
         });
-    }
+    
   };
 
   return (
