@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   Alert,
   Modal,
@@ -11,7 +11,7 @@ import {
 import { UserContext } from "../UserContext";
 //
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+// import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -10,32 +10,34 @@ import {
 
 import { petApi } from "../../api/pet";
 import ModalPet from "../../components/ModalPet";
-import banner from "../../../assets/img/run.webp";
-import dog from "../../../assets/img/dog.jpeg";
 
 import { Ionicons } from "@expo/vector-icons";
 
+import { UserContext } from "../../UserContext";
+
 const MyPet = () => {
+  const { userData } = useContext(UserContext);
+  const [count, setCount] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [pet, setPet] = useState([]);
-  const [breed, setBreed] = useState([]);
   const [size, setSize] = useState("");
   const [loading, setLoading] = useState(true);
 
   const getPets = () => {
     petApi
-      .get("/usuario")
+      .get(`/${userData.username}`)
+      // ACA VA EL NAME
       .then((res) => {
         // res.data.searchPets.length | Cantidad de PERROS
         // console.log(res.data.searchPets[0]);
-        setPet(res.data.searchPets[0]);
+        setPet(res.data.searchPets);
 
-        if (pet.size == "verybig") {
-          setSize("Muy Grande");
-        }
-        if (pet.size === "big") setSize("Grande");
-        if (pet.size === "medium") setSize("Mediano");
-        if (pet.size === "small") setSize("Pequeño");
+        // if (pet[count].size == "verybig") {
+        //   setSize("Muy Grande");
+        // }
+        // if (pet[count].size === "big") setSize("Grande");
+        // if (pet[count].size === "medium") setSize("Mediano");
+        // if (pet[count].size === "small") setSize("Pequeño");
 
         setLoading(false);
       })
@@ -44,6 +46,16 @@ const MyPet = () => {
         setLoading(false);
       });
   };
+
+  useEffect(() => {
+    console.log("hola");
+    if (pet[count].size == "verybig") {
+      setSize("Muy Grande");
+    }
+    if (pet[count].size === "big") setSize("Grande");
+    if (pet[count].size === "medium") setSize("Mediano");
+    if (pet[count].size === "small") setSize("Pequeño");
+  }, [count]);
 
   useEffect(() => {
     getPets();
@@ -57,13 +69,32 @@ const MyPet = () => {
     );
   }
 
+  const Next = () => {
+    setCount(count + 1);
+    console.log("count es: " + count);
+  };
+
+  const Prev = () => {
+    setCount(count - 1);
+    console.log("count es: " + count);
+  };
+
   return (
     <View style={styles.container}>
       {pet ? (
         <View style={styles.content}>
-          <Image source={{ uri: pet.photos[1] }} style={styles.banner} />
-          <Image source={{ uri: pet.photos[0] }} style={styles.image_profile} />
-          <Text style={styles.name}>{pet.name}</Text>
+          <Image source={{ uri: pet[count].photos[1] }} style={styles.banner} />
+          <Image
+            source={{ uri: pet[count].photos[0] }}
+            style={styles.image_profile}
+          />
+          <Text style={styles.name}>{pet[count].name}</Text>
+          <TouchableOpacity onPress={Next}>
+            <Text>Siguente</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={Prev}>
+            <Text>Anterior</Text>
+          </TouchableOpacity>
           <View style={styles.info}>
             <View style={styles.left}>
               <Text style={[styles.center, styles.title]}>Tamaño</Text>
@@ -71,9 +102,9 @@ const MyPet = () => {
             </View>
             <View style={styles.right}>
               <Text style={[styles.center, styles.title]}>Raza</Text>
-              <Text style={styles.center}>{pet.breed}</Text>
+              <Text style={styles.center}>{pet[count].breed}</Text>
             </View>
-            {pet.genre === "male" ? (
+            {pet[count].genre === "male" ? (
               <Ionicons name="male" size={24} color="black" />
             ) : (
               <Ionicons name="female" size={24} color="black" />
@@ -82,14 +113,32 @@ const MyPet = () => {
           <View style={styles.images_container}>
             <View style={styles.images}>
               <View style={styles.div}>
-                <Image source={{ uri: pet.photos[2] }} style={styles.picture} />
-                <Image source={{ uri: pet.photos[2] }} style={styles.picture} />
-                <Image source={{ uri: pet.photos[2] }} style={styles.picture} />
+                <Image
+                  source={{ uri: pet[0].photos[2] }}
+                  style={styles.picture}
+                />
+                <Image
+                  source={{ uri: pet[0].photos[2] }}
+                  style={styles.picture}
+                />
+                <Image
+                  source={{ uri: pet[0].photos[2] }}
+                  style={styles.picture}
+                />
               </View>
               <View style={styles.div}>
-                <Image source={{ uri: pet.photos[2] }} style={styles.picture} />
-                <Image source={{ uri: pet.photos[2] }} style={styles.picture} />
-                <Image source={{ uri: pet.photos[2] }} style={styles.picture} />
+                <Image
+                  source={{ uri: pet[0].photos[2] }}
+                  style={styles.picture}
+                />
+                <Image
+                  source={{ uri: pet[0].photos[2] }}
+                  style={styles.picture}
+                />
+                <Image
+                  source={{ uri: pet[0].photos[2] }}
+                  style={styles.picture}
+                />
               </View>
             </View>
           </View>
@@ -98,7 +147,6 @@ const MyPet = () => {
         <View style={styles.error}>
           <Text style={styles.error_text}>No hay mascotas</Text>
         </View>
-        
       )}
       <TouchableOpacity
         style={styles.add}
@@ -217,7 +265,7 @@ const styles = StyleSheet.create({
   error_text: {
     fontSize: 26,
     marginTop: 20,
-  }
+  },
 });
 
 export default MyPet;
