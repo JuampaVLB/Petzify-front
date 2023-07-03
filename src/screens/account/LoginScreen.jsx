@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// Core
+
+import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
@@ -6,7 +8,11 @@ import {
   Text,
   StyleSheet,
   Image,
+  Keyboard,
 } from "react-native";
+
+// Modules
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -16,12 +22,15 @@ import {
 } from "react-native-alert-notification";
 import { authApi } from "../../api/auth";
 
+// Assets
+
 import { AntDesign } from "@expo/vector-icons";
 import Logo from "../../../assets/img/logo.jpeg";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const navigation = useNavigation();
 
@@ -63,11 +72,37 @@ const LoginScreen = () => {
     }
   };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardOpen(true);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardOpen(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <AlertNotificationRoot theme="dark">
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          keyboardOpen ? styles.containerKeyboardOpen : null,
+        ]}
+      >
         <View style={styles.form}>
-        <Image source={Logo} />
+          <Image source={Logo} />
           <TextInput
             style={styles.input}
             placeholder="Usuario"
@@ -98,14 +133,18 @@ const LoginScreen = () => {
             style={[styles.button, styles.connect]}
           >
             <AntDesign name="google" size={28} color="green" />
-            <Text style={{ color: "black" }}>Continuar con Google</Text>
+            <Text style={{ color: "black", width: 160 }}>
+              Continuar con Google
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleSubmit()}
             style={[styles.button, styles.connect]}
           >
             <AntDesign name="facebook-square" size={28} color="green" />
-            <Text style={{ color: "black" }}>Continuar con Facebook</Text>
+            <Text style={{ color: "black", width: 160 }}>
+              Continuar con Facebook
+            </Text>
           </TouchableOpacity>
           <View style={styles.box}>
             <View style={styles.line} />
@@ -123,11 +162,13 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "100%",
+    minHeight: "100%",
     backgroundColor: "#fff",
-    flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+  },
+  containerKeyboardOpen: {
+    minHeight: "250%",
   },
   form: {
     marginTop: 100,
@@ -155,13 +196,15 @@ const styles = StyleSheet.create({
     width: "80%",
     alignSelf: "center",
     borderRadius: 50,
-    borderWidth: 2,
+    // borderWidth: 2,
   },
   connect: {
+    borderWidth: 2,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     gap: 15,
+    borderRadius: 50,
     alignItems: "center",
     backgroundColor: "#fff",
   },

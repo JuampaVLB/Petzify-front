@@ -220,7 +220,7 @@ export default function Post({ estado, setEstado }) {
                   <Ionicons name="image-outline" size={34} color="green" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn_img}>
-                  <MaterialIcons name="tag-faces" size={34} color="green" />
+                <MaterialIcons name="attach-money" size={34} color="green" />
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
