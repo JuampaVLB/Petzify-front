@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  ImageBackground,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -16,8 +16,10 @@ import {
 } from "react-native-alert-notification";
 import { authApi } from "../../api/auth";
 
-const LoginScreen = () => {
+import { AntDesign } from "@expo/vector-icons";
+import Logo from "../../../assets/img/logo.jpeg";
 
+const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -63,21 +65,19 @@ const LoginScreen = () => {
 
   return (
     <AlertNotificationRoot theme="dark">
-      <ImageBackground
-        source={require("../../../assets/img/login.jpeg")}
-        style={styles.image}
-      >
+      <View style={styles.container}>
         <View style={styles.form}>
+        <Image source={Logo} />
           <TextInput
             style={styles.input}
-            placeholder="Ingrese su usuario"
+            placeholder="Usuario"
             defaultValue={username}
             onChangeText={(newText) => setUsername(newText)}
           />
           <TextInput
             secureTextEntry={true}
             style={styles.input}
-            placeholder="Ingrese su contraseña"
+            placeholder="Contraseña"
             onChangeText={(newText) => setPassword(newText)}
             defaultValue={password}
           />
@@ -88,49 +88,82 @@ const LoginScreen = () => {
           >
             <Text style={styles.text}>Acceder</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.link}>Crear Cuenta</Text>
+          <View style={styles.box}>
+            <View style={styles.line} />
+            <Text style={styles.text_box}>Otro</Text>
+            <View style={styles.line} />
+          </View>
+          <TouchableOpacity
+            onPress={() => handleSubmit()}
+            style={[styles.button, styles.connect]}
+          >
+            <AntDesign name="google" size={28} color="green" />
+            <Text style={{ color: "black" }}>Continuar con Google</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleSubmit()}
+            style={[styles.button, styles.connect]}
+          >
+            <AntDesign name="facebook-square" size={28} color="green" />
+            <Text style={{ color: "black" }}>Continuar con Facebook</Text>
+          </TouchableOpacity>
+          <View style={styles.box}>
+            <View style={styles.line} />
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+              <Text style={styles.text_box}>No tengo cuenta</Text>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
         </View>
-      </ImageBackground>
+      </View>
     </AlertNotificationRoot>
   );
 };
 
 const styles = StyleSheet.create({
-  image: {
+  container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#ccc",
+    backgroundColor: "#fff",
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   form: {
     marginTop: 100,
     width: "90%",
-    minHeight: "40%",
+    minHeight: "60%",
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "column",
+    gap: 30,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "gray",
+    borderWidth: 2,
+    borderColor: "black",
     borderRadius: 5,
-    padding: 10,
+    padding: 5,
+    paddingLeft: 15,
     margin: 10,
     width: "80%",
     backgroundColor: "white",
   },
   button: {
-    backgroundColor: "mediumseagreen",
-    padding: 10,
+    backgroundColor: "#73A073",
+    padding: 15,
     width: "80%",
     alignSelf: "center",
-    borderRadius: 10,
+    borderRadius: 50,
+    borderWidth: 2,
+  },
+  connect: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: 15,
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   text: {
     fontSize: 15,
@@ -145,6 +178,32 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 10,
     color: "white",
+  },
+  box: {
+    width: "80%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  line: {
+    height: 1,
+    width: 100,
+    marginHorizontal: 5,
+    marginTop: 6,
+    backgroundColor: "gray",
+  },
+  text_box: {
+    fontSize: 14,
+    color: "#00aae4",
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 5,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
   },
 });
 

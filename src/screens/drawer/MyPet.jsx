@@ -74,17 +74,17 @@ const MyPet = () => {
     console.log("pet length: " + pet.length + " count: " + count);
     setCount(count + 1);
     console.log("count es: " + count);
-    if(count === pet.length-1) {
+    if (count === pet.length - 1) {
       setCount(0);
     }
   };
 
   const Prev = () => {
-      setCount(count - 1);
-      console.log("count es: " + count);
-      if(count === 0) {
-        setCount(pet.length-1);
-      }
+    setCount(count - 1);
+    console.log("count es: " + count);
+    if (count === 0) {
+      setCount(pet.length - 1);
+    }
   };
 
   return (
