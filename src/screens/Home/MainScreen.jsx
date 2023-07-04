@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Text,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,6 +25,10 @@ import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
 import SwitchSelector from "react-native-switch-selector";
 
+// Assets
+
+import Empty from "../../../assets/img/empty.jpeg";
+
 const MainScreen = () => {
   const socket = io("https://petzify.up.railway.app");
 
@@ -35,6 +40,7 @@ const MainScreen = () => {
   const { setUserData } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
+  const [category, setCategory] = useState("");
   const [buttonOpacity] = useState(new Animated.Value(0));
 
   const GetToken = async () => {
@@ -112,6 +118,7 @@ const MainScreen = () => {
   const [reversedPosts, setReversedPosts] = useState([]);
 
   useEffect(() => {
+    console.log("len: " + posts.length);
     setReversedPosts(posts.slice().reverse());
   }, [posts]);
 
@@ -120,7 +127,7 @@ const MainScreen = () => {
       <View style={styles.category}>
         <SwitchSelector
           initial={0}
-          // onPress={(value) => this.setState({ gender: value })}
+          onPress={(value) => setCategory(value)}
           textColor={"#73A073"}
           selectedColor={"#fff"}
           buttonColor={"#73A073"}
@@ -136,25 +143,37 @@ const MainScreen = () => {
           accessibilityLabel="posts-switch-selector"
         />
       </View>
-      <ScrollView
-        style={styles.scroll}
-        ref={scrollViewRef}
-        snapToInterval={height - 50 - 60}
-        decelerationRate="fast"
-      >
-        {reversedPosts.map((post, index) => (
-          <Post
-            key={post._id}
-            imageURL="run"
-            username={post.username}
-            title={post.title}
-            desc={post.desc}
-            index={reversedPosts.length === index + 1 ? true : false}
-            room={post.room}
-            image={post.image}
-          />
-        ))}
-      </ScrollView>
+      {posts.length > 0 ? (
+        <ScrollView
+          style={styles.scroll}
+          ref={scrollViewRef}
+          snapToInterval={height - 50 - 60}
+          decelerationRate="fast"
+        >
+          {category === "follows"
+            ? reversedPosts.map((post, index) => (
+                <Post
+                  key={post._id}
+                  imageURL="run"
+                  username={post.username}
+                  title={post.title}
+                  desc={post.desc}
+                  index={reversedPosts.length === index + 1 ? true : false}
+                  room={post.room}
+                  image={post.image}
+                />
+              ))
+            : null}
+        </ScrollView>
+      ) : (
+        <View style={styles.empty_container}>
+          <Image source={Empty} style={styles.image} />
+          <Text style={{ color: "#ccc", fontWeight: "bold" }}>
+            Parece que no seguimos a nadie...
+          </Text>
+        </View>
+      )}
+
       <TouchableOpacity style={styles.post} onPress={toggleButtons}>
         <Ionicons name="add" size={48} color="white" />
       </TouchableOpacity>
@@ -185,6 +204,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     minHeight: "100%",
+    backgroundColor: "white",
   },
   category: {
     display: "flex",
@@ -192,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: 40,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   switch: {
     width: 250,
@@ -230,6 +250,17 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  empty_container: {
+    width: "100%",
+    height: "80%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: 48,
+    height: 48,
   },
 });
 
