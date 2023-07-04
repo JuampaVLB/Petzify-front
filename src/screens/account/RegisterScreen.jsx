@@ -21,23 +21,20 @@ import {
   AlertNotificationRoot,
 } from "react-native-alert-notification";
 import { Dropdown } from "react-native-element-dropdown";
+import Checkbox from "expo-checkbox";
 
 // Assets
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import Logo from "../../../assets/img/logo.jpeg";
-
-const data = [
-  { label: "Usuario", value: "user" },
-  { label: "Negocio", value: "business" },
-  { label: "Institucion", value: "institution" },
-];
 
 const RegisterScreen = () => {
   const [role, setRole] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [isChecked, setChecked] = useState(false);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -61,6 +58,10 @@ const RegisterScreen = () => {
       textBody: str,
       button: "close",
     });
+  };
+
+  const handleRole = (param) => {
+    setRole(param);
   };
 
   const handleSubmit = () => {
@@ -136,7 +137,49 @@ const RegisterScreen = () => {
           <Text style={styles.text_box}>Tipo de cuenta</Text>
           <View style={styles.line} />
         </View>
-        <Dropdown
+        <View style={styles.box_role}>
+          <TouchableOpacity
+            style={[styles.btn_role, role === "user" ? styles.selected : null]}
+            onPress={() => handleRole("user")}
+          >
+            <FontAwesome
+              name="user-circle"
+              size={38}
+              color={role === "user" ? "#000000" : "#73A073"}
+            />
+            <Text>Usuario</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.btn_business,
+              styles.btn_role,
+              role === "business" ? styles.selected : null,
+            ]}
+            onPress={() => handleRole("business")}
+          >
+            <Entypo
+              name="shop"
+              size={38}
+              color={role === "business" ? "#000000" : "#73A073"}
+            />
+            <Text>Negocio</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.btn_role,
+              role === "institution" ? styles.selected : null,
+            ]}
+            onPress={() => handleRole("institution")}
+          >
+            <FontAwesome
+              name="institution"
+              size={38}
+              color={role === "institution" ? "#000000" : "#73A073"}
+            />
+            <Text>Institucion</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -163,7 +206,7 @@ const RegisterScreen = () => {
               color="green"
             />
           )}
-        />
+        /> */}
         <TouchableOpacity onPress={() => handleSubmit()} style={styles.button}>
           <Text style={styles.text}>Registrarse</Text>
         </TouchableOpacity>
@@ -213,6 +256,9 @@ const styles = StyleSheet.create({
   },
   containerKeyboardOpen: {
     minHeight: "150%",
+  },
+  checkbox: {
+    margin: 8,
   },
   input: {
     borderWidth: 2,
@@ -300,7 +346,8 @@ const styles = StyleSheet.create({
     display: "none",
   },
   box: {
-    width: "80%",
+    minWidth: "80%",
+    maxWidth: "80%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -323,8 +370,23 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    textAlign: "center",
     marginHorizontal: 10,
   },
+  box_role: {
+    width: "80%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  btn_role: {
+    display: "flex",
+    alignItems: "center",
+  },
+  btn_business: {
+    marginLeft: 10,
+   }
 });
 
 export default RegisterScreen;
