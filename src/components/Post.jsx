@@ -96,7 +96,7 @@ export default function Post(props) {
           <Menu
             visible={visible}
             onDismiss={closeMenu}
-            anchorPosition="bottom"
+            anchorPosition="top"
             anchor={
               <Button onPress={openMenu}>
                 <SimpleLineIcons name="options" size={24} color="black" />
@@ -213,6 +213,7 @@ const styles = StyleSheet.create({
   container: {
     height: Dimensions.get("window").height - 104,
     width: "100%",
+    backgroundColor: "#fff"
   },
   top: {
     width: "100%",

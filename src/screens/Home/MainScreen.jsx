@@ -6,6 +6,7 @@ import {
   Animated,
   ScrollView,
   Dimensions,
+  Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +22,7 @@ import { authApi } from "../../api/auth";
 import Post from "../../components/Post";
 import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
+import SwitchSelector from "react-native-switch-selector";
 
 const MainScreen = () => {
   const socket = io("https://petzify.up.railway.app");
@@ -115,6 +117,25 @@ const MainScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.category}>
+        <SwitchSelector
+          initial={0}
+          // onPress={(value) => this.setState({ gender: value })}
+          textColor={"#73A073"}
+          selectedColor={"#fff"}
+          buttonColor={"#73A073"}
+          borderColor={"#73A073"}
+          style={styles.switch}
+          hasPadding
+          height={30}
+          options={[
+            { label: "Seguidos", value: "follows" }, //images.feminino = require('./path_to/assets/img/feminino.png')
+            { label: "Otros", value: "other" }, //images.masculino = require('./path_to/assets/img/masculino.png')
+          ]}
+          testID="posts-switch-selector"
+          accessibilityLabel="posts-switch-selector"
+        />
+      </View>
       <ScrollView
         style={styles.scroll}
         ref={scrollViewRef}
@@ -164,6 +185,17 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     minHeight: "100%",
+  },
+  category: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: 40,
+    backgroundColor: '#fff'
+  },
+  switch: {
+    width: 250,
   },
   scroll: {
     flex: 1,
