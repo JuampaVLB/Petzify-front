@@ -33,6 +33,7 @@
     "react-native-bottom-sheet-picker": "^1.1.7",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-emoji-board": "^1.2.1",
+    "react-native-form-component": "^2.6.12",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-instagram-alerts": "^1.0.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",

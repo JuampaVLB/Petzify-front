@@ -171,7 +171,7 @@ const MyPet = () => {
         style={styles.add}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={{ fontSize: 32, color: "white" }}>+</Text>
+        <Text style={{ fontSize: 42, color: "white" }}>+</Text>
       </TouchableOpacity>
       <View>
         <ModalPet setEstado={setModalVisible} estado={modalVisible} />
@@ -223,10 +223,16 @@ const styles = StyleSheet.create({
   },
   add: {
     position: "absolute",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     right: 0,
-    bottom: 725,
+    bottom: 800,
     margin: 15,
-    padding: 20,
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingRight: 15,
     borderRadius: 10,
     backgroundColor: "green",
   },

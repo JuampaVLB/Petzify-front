@@ -27,7 +27,7 @@ import SwitchSelector from "react-native-switch-selector";
 
 // Assets
 
-import Empty from "../../../assets/img/empty.jpeg";
+import Empty from "../../../assets/img/empty.png";
 
 const MainScreen = () => {
   const socket = io("https://petzify.up.railway.app");
@@ -150,20 +150,27 @@ const MainScreen = () => {
           snapToInterval={height - 50 - 60}
           decelerationRate="fast"
         >
-          {category === "follows"
-            ? reversedPosts.map((post, index) => (
-                <Post
-                  key={post._id}
-                  imageURL="run"
-                  username={post.username}
-                  title={post.title}
-                  desc={post.desc}
-                  index={reversedPosts.length === index + 1 ? true : false}
-                  room={post.room}
-                  image={post.image}
-                />
-              ))
-            : null}
+          {category === "follows" ? (
+            reversedPosts.map((post, index) => (
+              <Post
+                key={post._id}
+                imageURL="run"
+                username={post.username}
+                title={post.title}
+                desc={post.desc}
+                index={reversedPosts.length === index + 1 ? true : false}
+                room={post.room}
+                image={post.image}
+              />
+            ))
+          ) : (
+            <View style={styles.empty_container}>
+              <Image source={Empty} style={styles.image} />
+              <Text style={{ color: "#ccc", fontWeight: "bold" }}>
+                Parece que no seguimos a nadie...
+              </Text>
+            </View>
+          )}
         </ScrollView>
       ) : (
         <View style={styles.empty_container}>
@@ -253,7 +260,7 @@ const styles = StyleSheet.create({
   },
   empty_container: {
     width: "100%",
-    height: "80%",
+    height: 750,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

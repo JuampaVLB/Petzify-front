@@ -1,24 +1,20 @@
 // Essentials
 
 import React, { useContext } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Cardpet from "../../components/Cardpet";
 
 // Components
 
-import Banner from "../../../assets/img/run.webp";
-import Dog from "../../../assets/img/dog.jpeg";
+import Banner from "../../../assets/img/banner.jpeg";
+import Dog from "../../../assets/splash1.png";
 import { UserContext } from "../../UserContext";
 
 // Assets
 
+import { Feather } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 const Profile = () => {
@@ -32,15 +28,18 @@ const Profile = () => {
           <Image source={Dog} style={styles.profile_picture} />
           <View style={styles.socials}>
             <TouchableOpacity>
-              <Ionicons name="add-circle-outline" size={38} color="green" />
+              {/* <Ionicons name="add-circle-outline" size={38} color="green" /> */}
+              <Entypo name="instagram-with-circle" size={38} color="green" />
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <Ionicons name="add-circle-outline" size={38} color="green" />
+              {/* <Ionicons name="add-circle-outline" size={38} color="green" /> */}
+              <Entypo name="youtube-with-circle" size={38} color="green" />
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <Ionicons name="add-circle-outline" size={38} color="green" />
+              {/* <Ionicons name="add-circle-outline" size={38} color="green" /> */}
+              <Entypo name="twitter-with-circle" size={38} color="green" />
             </TouchableOpacity>
           </View>
           <Image />
@@ -58,6 +57,9 @@ const Profile = () => {
               <Text style={{ color: "#fff" }}>Mas</Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity style={styles.pencil}>
+            <EvilIcons name="pencil" size={38} color="black" />
+          </TouchableOpacity>
           <View style={styles.description}>
             <Text>
               Descripcion muy importante sobre algo re importante hablando de mi
@@ -82,7 +84,9 @@ const Profile = () => {
           </View>
         </View>
       </View>
-      <View style={styles.wall}></View>
+      <View style={styles.wall}>
+        <Cardpet />
+      </View>
     </View>
   );
 };
@@ -100,30 +104,34 @@ const styles = StyleSheet.create({
     height: "60%",
   },
   wall: {
+    marginTop: 80,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
-    height: "40%",
+    height: 200,
   },
   banner: {
     position: "relative",
     width: "100%",
-    height: 200,
+    height: 150,
   },
   profile_picture: {
     position: "absolute",
     bottom: 0,
-    marginBottom: -64,
+    marginBottom: -45,
     marginLeft: 20,
     borderWidth: 2,
     borderColor: "black",
-    width: 128,
-    height: 128,
+    width: 100,
+    height: 100,
     borderRadius: 100,
   },
   socials: {
     position: "absolute",
     bottom: 0,
-    marginLeft: 180,
-    marginBottom: -50,
+    marginLeft: 140,
+    marginBottom: -45,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -134,7 +142,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 80,
+    marginTop: 50,
   },
   username: {
     color: "#000",
@@ -191,6 +199,13 @@ const styles = StyleSheet.create({
   interaction_desc: {
     color: "gray",
     textAlign: "center",
+  },
+  pencil: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    marginRight: 20,
+    marginTop: -45,
   },
 });
 
