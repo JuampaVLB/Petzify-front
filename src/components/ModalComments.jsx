@@ -28,7 +28,7 @@ import { AntDesign } from "@expo/vector-icons";
 const ModalComments = ({ estado, setEstado, room }) => {
 
   const { userData } = useContext(UserContext);
-  const socket = io("https://petzify.up.railway.app");
+  const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000

@@ -13,6 +13,7 @@ import {
 
 // Components
 
+import Carousel from "react-native-reanimated-carousel";
 import { UserContext } from "../UserContext";
 import ModalComments from "./ModalComments";
 import { Button, Menu } from "react-native-paper";
@@ -29,7 +30,10 @@ import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 export default function Post(props) {
-  const socket = io("https://petzify.up.railway.app");
+  const width = Dimensions.get("window").width;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselData = [...new Array(6).keys()];
+  const socket = io("http://192.168.0.3:5000");
 
   const [modalVisible, setModalVisible] = useState(false);
   const [room, setRoom] = useState("");
@@ -75,6 +79,26 @@ export default function Post(props) {
       },
     ]);
   };
+
+  const testing = props.image;
+
+  const renderPagination = () => {
+    return (
+      <View style={styles.paginationContainer}>
+        {props.image.map((item, index) => (
+          <View
+            key={index}
+            style={[
+              styles.paginationDot,
+              activeIndex === index && styles.activePaginationDot,
+            ]}
+          />
+        ))}
+      </View>
+    );
+  };
+
+  const test = [1,2,3,4,5];
 
   return (
     <View
@@ -135,7 +159,24 @@ export default function Post(props) {
             ) : null}
           </Menu>
         </View>
-        <Image source={{ uri: props.image }} style={styles.image} />
+        {props.image.length > 1 ? (
+          <Carousel
+            pagingEnabled={true}
+            mode="parallax"
+            width={width}
+            data={props.image}
+            scrollAnimationDuration={1000}
+            style={styles.image}
+            onSnapToItem={(index) => setActiveIndex(index)}
+            renderItem={({ index }) => (
+              // console.log("el item es" + index)
+              <Image source={{ uri: props.image[index] }} style={styles.image} />
+            )}
+          />
+        ) : (
+          <Image source={{ uri: props.image[0] }} style={styles.image} />
+        )}
+        {props.image.length > 1 ? renderPagination() : null}
       </View>
       <View style={styles.bottom}>
         <View style={styles.desc}>
@@ -213,7 +254,7 @@ const styles = StyleSheet.create({
   container: {
     height: Dimensions.get("window").height - 104,
     width: "100%",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   top: {
     width: "100%",
@@ -261,5 +302,24 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+  },
+  paginationContainer: {
+    position: "absolute",
+    bottom: 0,
+    marginBottom: 15,
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  paginationDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#c7c7c7",
+    marginHorizontal: 5,
+  },
+  activePaginationDot: {
+    backgroundColor: "green",
   },
 });

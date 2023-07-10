@@ -45,110 +45,95 @@ export default function Post({ estado, setEstado }) {
     setEstado(false);
   };
 
-  // const Danger = (str) => {
-  //   Dialog.show({
-  //     type: ALERT_TYPE.DANGER,
-  //     title: "Danger",
-  //     textBody: str,
-  //     button: "close",
-  //   });
-  // };
-
-  // const Success = (str) => {
-  //   Dialog.show({
-  //     type: ALERT_TYPE.SUCCESS,
-  //     title: "Success",
-  //     textBody: str,
-  //     button: "close",
-  //   });
-  // };
-
+  const [images, setImages] = useState([]);
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
-  const [filename1, setFilename1] = useState("");
-  const [blob1, setBlob1] = useState("");
+  const [responseImages, setResponse] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const socket = io("https://petzify.up.railway.app");
+  const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
 
-  const handlePost = () => {
-    var img1 = "";
+  const handlePost = async () => {
+    if (isUploading) {
+      return;
+    }
 
-    if (filename1.length > 1) {
+    setIsUploading(true);
+
+    let uploadedCount = 0;
+    setImages([]);
+    const uploadedImages = [];
+
+    for (const element of images) {
       const params = {
         Bucket: "petzify",
-        Key: filename1,
-        Body: blob1,
+        Key: element.filename,
+        Body: element.blob,
         ContentType: "image/jpeg",
       };
 
-      s3.upload(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-
-        img1 = data.Location;
-        console.log(img1);
-        // console.log("Imagen subida exitosamente: ", data.Location);
-        setFilename1("");
-        setBlob1("");
-
-        postApi
-          .post("/send/post", {
-            username: userData.username,
-            title: title,
-            desc: desc,
-            image: img1,
-          })
-          .then((res) => {
-            // Success("Posteo Creado Perfectamente");
-            // Alert.alert("Posteo Creado Correctamente!");
-            socket.emit("client:post", true);
-            setDesc("");
-            setTitle("");
-
-            handleCloseModal();
-          })
-          .catch((error) => {
-            if (error.response.data.length >= 1) {
-              // Danger(error.response.data[0].message);
-              // handleCloseModal();
+      try {
+        const data = await new Promise((resolve, reject) => {
+          s3.upload(params, (err, data) => {
+            if (err) {
+              reject(err);
             } else {
-              // Danger(error.response.data.message);
+              resolve(data);
             }
           });
-      });
-    } else {
-      console.log("no subiste imagenes");
-      postApi
-        .post("/send/post", {
-          username: userData.username,
-          title: title,
-          desc: desc,
-        })
-        .then((res) => {
-          // Success("Posteo Creado Perfectamente");
-          // alert.Alert("post creado");
-          socket.emit("client:post", true);
+        });
+
+        uploadedCount++;
+        uploadedImages.push(data.Location);
+
+        if (uploadedCount === images.length) {
+          console.log(
+            "Todas las imágenes se han subido exitosamente. Enviar el formulario."
+          );
+          console.log("response: ", uploadedImages);
+
+          postApi
+            .post("/send/post", {
+              username: userData.username,
+              title: title,
+              desc: desc,
+              image: uploadedImages,
+            })
+            .then((res) => {
+              socket.emit("client:post", true);
+              setDesc("");
+              setTitle("");
+
+              handleCloseModal();
+            })
+            .catch((error) => {
+              if (error.response.data.length >= 1) {
+              } else {
+                console.log(error.response.data.message);
+              }
+            });
           setDesc("");
           setTitle("");
-
-          // handleCloseModal();
-        })
-        .catch((error) => {
-          if (error.response.data.length >= 1) {
-            // Alert.alert(error.response.data[0].message);
-            Danger(error.response.data[0].message);
-            // handleCloseModal();
-          } else {
-            // Alert.alert(error.response.data.message);
-            Danger(error.response.data.message);
-          }
-        });
+          handleCloseModal();
+        }
+      } catch (error) {
+        console.log("Error al subir la imagen:", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
+  };
+
+  const addNewElements = (data) => {
+    setImages((prevArray) => [...prevArray, data]);
+  };
+
+  const addNewLocations = (data) => {
+    setResponse((prevArray) => [...prevArray, data]);
+    console.log(responseImages);
   };
 
   const handleImage = async () => {
@@ -159,26 +144,47 @@ export default function Post({ estado, setEstado }) {
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync();
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+    });
 
     if (!result.canceled) {
       if (Array.isArray(result.assets) && result.assets.length > 0) {
-        const selectedAsset = result.assets[0];
-        const imageUrl = selectedAsset.uri;
-        const fileName = selectedAsset.uri.split("/").pop();
+        const selectedAssets = result.assets;
+        console.log("selectedAssets:", selectedAssets);
+        for (let i = 0; i < selectedAssets.length; i++) {
+          let selectedAsset = selectedAssets[i];
+          let imageUrl = selectedAsset.uri;
+          let fileName = selectedAsset.uri.split("/").pop();
+          try {
+            let response = await fetch(selectedAsset.uri);
+            let blob = await response.blob();
 
-        console.log("file name: " + fileName);
-        console.log("image url:  " + imageUrl);
-
-        try {
-          const response = await fetch(result.assets[0].uri);
-          const blob = await response.blob();
-
-          setFilename1(fileName);
-          setBlob1(blob);
-        } catch (error) {
-          console.log("Error fetching image:", error);
+            addNewElements({
+              filename: fileName,
+              url: imageUrl,
+              blob,
+            });
+          } catch (error) {
+            console.log("Error fetching image:", error);
+          }
         }
+        // const imageUrl = selectedAsset.uri;
+        // const fileName = selectedAsset.uri.split("/").pop();
+
+        // console.log("file name: " + fileName);
+        // console.log("image url:  " + imageUrl);
+
+        //   try {
+        //     const response = await fetch(result.assets[0].uri);
+        //     const blob = await response.blob();
+
+        //     setFilename1(fileName);
+        //     setBlob1(blob);
+        //   } catch (error) {
+        //     console.log("Error fetching image:", error);
+        //   }
       }
     }
   };
@@ -190,56 +196,56 @@ export default function Post({ estado, setEstado }) {
       visible={estado}
       onRequestClose={handleCloseModal}
     >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.account_info}>
-              <Image source={profile} style={styles.imageProfile} />
-              <Text>@{userData.username}</Text>
-            </View>
-            <TextInput
-              aria-label="input"
-              aria-labelledby="titulo"
-              style={styles.input_title}
-              placeholder="Escribe un Titulo"
-              defaultValue={title}
-              onChangeText={(newText) => setTitle(newText)}
-            />
-            <TextInput
-              aria-label="input"
-              aria-labelledby="descripcion"
-              style={styles.input_desc}
-              defaultValue={desc}
-              placeholder="Escribe una Descripcion"
-              multiline={true}
-              numberOfLines={4}
-              onChangeText={(newText) => setDesc(newText)}
-            />
-            <View style={styles.bottom}>
-              <View style={styles.bottom_icons}>
-                <TouchableOpacity style={styles.btn_img} onPress={handleImage}>
-                  <Ionicons name="image-outline" size={34} color="green" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btn_img}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <View style={styles.account_info}>
+            <Image source={profile} style={styles.imageProfile} />
+            <Text>@{userData.username}</Text>
+          </View>
+          <TextInput
+            aria-label="input"
+            aria-labelledby="titulo"
+            style={styles.input_title}
+            placeholder="Escribe un Titulo"
+            defaultValue={title}
+            onChangeText={(newText) => setTitle(newText)}
+          />
+          <TextInput
+            aria-label="input"
+            aria-labelledby="descripcion"
+            style={styles.input_desc}
+            defaultValue={desc}
+            placeholder="Escribe una Descripcion"
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={(newText) => setDesc(newText)}
+          />
+          <View style={styles.bottom}>
+            <View style={styles.bottom_icons}>
+              <TouchableOpacity style={styles.btn_img} onPress={handleImage}>
+                <Ionicons name="image-outline" size={34} color="green" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.btn_img}>
                 <MaterialIcons name="attach-money" size={34} color="green" />
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                title="Postear"
-                onPress={handlePost}
-                style={styles.btn_hide}
-              >
-                <Text style={{ color: "white" }}>Postear</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
-              title="Cerrar modal"
-              onPress={handleCloseModal}
-              style={styles.cross}
+              title="Postear"
+              onPress={handlePost}
+              style={styles.btn_hide}
             >
-              <Entypo name="cross" size={32} color="black" />
+              <Text style={{ color: "white" }}>Postear</Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            title="Cerrar modal"
+            onPress={handleCloseModal}
+            style={styles.cross}
+          >
+            <Entypo name="cross" size={32} color="black" />
+          </TouchableOpacity>
         </View>
+      </View>
     </Modal>
   );
 }

@@ -30,7 +30,7 @@ import SwitchSelector from "react-native-switch-selector";
 import Empty from "../../../assets/img/empty.png";
 
 const MainScreen = () => {
-  const socket = io("https://petzify.up.railway.app");
+  const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
@@ -86,6 +86,7 @@ const MainScreen = () => {
     try {
       const response = await postApi.get("/all/post");
       setPosts(response.data);
+      // console.log(response.data.image);
     } catch (error) {
       console.error("Error al obtener los posts:", error);
     }
@@ -120,6 +121,7 @@ const MainScreen = () => {
   useEffect(() => {
     console.log("len: " + posts.length);
     setReversedPosts(posts.slice().reverse());
+    console.log(posts);
   }, [posts]);
 
   return (
