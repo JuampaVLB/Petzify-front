@@ -152,7 +152,7 @@ const MainScreen = () => {
           snapToInterval={height - 50 - 60}
           decelerationRate="fast"
         >
-          {category === "follows" ? (
+          {category != "other" ? (
             reversedPosts.map((post, index) => (
               <Post
                 key={post._id}
