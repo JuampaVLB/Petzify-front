@@ -15,7 +15,7 @@ import {
 // Components
 
 import { UserContext } from "../UserContext";
-import io from "socket.io-client";
+import socket from "../sockets";
 import Comment from "./Comment";
 import { postApi } from "../api/post";
 import Loader from "./Loader";
@@ -28,7 +28,7 @@ import { AntDesign } from "@expo/vector-icons";
 const ModalComments = ({ estado, setEstado, room }) => {
 
   const { userData } = useContext(UserContext);
-  const socket = io("http://192.168.0.3:5000");
+  // const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
@@ -61,6 +61,16 @@ const ModalComments = ({ estado, setEstado, room }) => {
   };
 
   useEffect(() => {
+    socket.on("server:loadcomments", (data) => {
+      setComments(data[0].comments);
+    });
+
+    return () => {
+      socket.off('server:loadcomments');
+    };
+  }, []);
+  
+  useEffect(() => {
     if (room) {
       fetchPosts(room);
     }
@@ -69,9 +79,9 @@ const ModalComments = ({ estado, setEstado, room }) => {
 
   }, [estado]);
 
-  socket.on("server:loadcomments", (data) => {
-    setComments(data[0].comments);
-  });
+  // socket.on("server:loadcomments", (data) => {
+  //   setComments(data[0].comments);
+  // });
 
   return (
     <View style={styles.centeredView}>

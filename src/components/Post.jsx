@@ -1,6 +1,6 @@
 // Essentials
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,7 +17,7 @@ import Carousel from "react-native-reanimated-carousel";
 import { UserContext } from "../UserContext";
 import ModalComments from "./ModalComments";
 import { Button, Menu } from "react-native-paper";
-import io from "socket.io-client";
+import socket from "../sockets";
 import { postApi } from "../api/post";
 
 // Assets
@@ -32,12 +32,20 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 export default function Post(props) {
   const width = Dimensions.get("window").width;
   const [activeIndex, setActiveIndex] = useState(0);
-  const carouselData = [...new Array(6).keys()];
-  const socket = io("http://192.168.0.3:5000");
+  // const socket = io("http://192.168.0.3:5000");
 
   const [modalVisible, setModalVisible] = useState(false);
   const [room, setRoom] = useState("");
   const { userData } = useContext(UserContext);
+
+  useEffect(() => {
+    socket.on('event', (data) => {
+    });
+
+    return () => {e
+      socket.off('event');
+    };
+  }, []);
 
   const handleComments = (postId) => {
     try {
@@ -80,8 +88,6 @@ export default function Post(props) {
     ]);
   };
 
-  const testing = props.image;
-
   const renderPagination = () => {
     return (
       <View style={styles.paginationContainer}>
@@ -97,8 +103,6 @@ export default function Post(props) {
       </View>
     );
   };
-
-  const test = [1,2,3,4,5];
 
   return (
     <View
@@ -162,7 +166,7 @@ export default function Post(props) {
         {props.image.length > 1 ? (
           <Carousel
             pagingEnabled={true}
-            mode="parallax"
+            // mode="parallax"
             width={width}
             data={props.image}
             scrollAnimationDuration={1000}
@@ -170,7 +174,11 @@ export default function Post(props) {
             onSnapToItem={(index) => setActiveIndex(index)}
             renderItem={({ index }) => (
               // console.log("el item es" + index)
-              <Image source={{ uri: props.image[index] }} style={styles.image} />
+              <Image
+                source={{ uri: props.image[index] }}
+                style={styles.image}
+              />   
+
             )}
           />
         ) : (

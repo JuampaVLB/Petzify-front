@@ -34,12 +34,19 @@ const MyPet = () => {
 
         if (pet[count].size == "verybig") {
           setSize("Muy Grande");
+          setLoading(false);
         }
-        if (pet[count].size === "big") setSize("Grande");
-        if (pet[count].size === "medium") setSize("Mediano");
-        if (pet[count].size === "small") setSize("Pequeño");
-
-        setLoading(false);
+        if (pet[count].size === "big") {
+          setSize("Grande");
+          setLoading(false);
+        }
+        if (pet[count].size === "medium") {
+          setSize("Mediano");
+        }
+        if (pet[count].size === "small") {
+          setSize("Pequeño");
+          setLoading(false);
+        }
       })
       .catch((err) => {
         console.log(err);

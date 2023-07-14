@@ -18,8 +18,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // } from "react-native-alert-notification";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { UserContext } from "../../UserContext";
-import io from "socket.io-client";
+import socket from "../../sockets";
 import { authApi } from "../../api/auth";
+import AwesomeButton from "react-native-really-awesome-button";
 import Post from "../../components/Post";
 import { postApi } from "../../api/post";
 import ModalPost from "../../components/ModalPost";
@@ -30,8 +31,6 @@ import SwitchSelector from "react-native-switch-selector";
 import Empty from "../../../assets/img/empty.png";
 
 const MainScreen = () => {
-  const socket = io("http://192.168.0.3:5000");
-
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
 
@@ -39,9 +38,9 @@ const MainScreen = () => {
 
   const { setUserData } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
-  const [showButtons, setShowButtons] = useState(false);
+  // const [showButtons, setShowButtons] = useState(false);
   const [category, setCategory] = useState("");
-  const [buttonOpacity] = useState(new Animated.Value(0));
+  // const [buttonOpacity] = useState(new Animated.Value(0));
 
   const GetToken = async () => {
     try {
@@ -69,18 +68,18 @@ const MainScreen = () => {
     }
   };
 
-  const toggleButtons = () => {
-    setShowButtons(!showButtons);
-    animatebtn();
-  };
+  // const toggleButtons = () => {
+  //   setShowButtons(!showButtons);
+  //   animatebtn();
+  // };
 
-  const animatebtn = () => {
-    Animated.timing(buttonOpacity, {
-      toValue: showButtons ? 1 : 0,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  };
+  // const animatebtn = () => {
+  //   Animated.timing(buttonOpacity, {
+  //     toValue: showButtons ? 1 : 0,
+  //     duration: 100,
+  //     useNativeDriver: true,
+  //   }).start();
+  // };
 
   const fetchPosts = async () => {
     try {
@@ -98,13 +97,13 @@ const MainScreen = () => {
     fetchPosts();
   }, []);
 
-  useEffect(() => {
-    socket.on("server:loadposts", () => {
-      fetchPosts();
-    });
+  // useEffect(() => {
+  //   socket.on("server:loadposts", () => {
+  //     fetchPosts();
+  //   });
 
-    fetchPosts();
-  }, []);
+  //   fetchPosts();
+  // }, []);
 
   socket.on("server:loadposts", () => {
     fetchPosts();
@@ -181,11 +180,15 @@ const MainScreen = () => {
             Parece que no seguimos a nadie...
           </Text>
         </View>
-      )}
-
-      <TouchableOpacity style={styles.post} onPress={toggleButtons}>
+      )}  
+      {/* <AwesomeButton>Text</AwesomeButton> */}
+      <TouchableOpacity
+      style={styles.post}
+      onPress={() => setModalVisible(true)}
+      >
         <Ionicons name="add" size={48} color="white" />
       </TouchableOpacity>
+      {/* 
       <Animated.View
         style={[styles.smallButtonsContainer, { opacity: buttonOpacity }]}
       >
@@ -202,6 +205,7 @@ const MainScreen = () => {
           <MaterialCommunityIcons name="dog" size={24} color={"white"} />
         </TouchableOpacity>
       </Animated.View>
+      */}
       <View style={styles.centeredView}>
         <ModalPost estado={modalVisible} setEstado={setModalVisible} />
       </View>

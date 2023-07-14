@@ -17,7 +17,7 @@ import {
 import { UserContext } from "../UserContext";
 import { postApi } from "../api/post";
 import * as ImagePicker from "expo-image-picker";
-import io from "socket.io-client";
+import socket from "../sockets";
 // import {
 //   ALERT_TYPE,
 //   Dialog,
@@ -50,8 +50,6 @@ export default function Post({ estado, setEstado }) {
   const [title, setTitle] = useState("");
   const [responseImages, setResponse] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
-
-  const socket = io("http://192.168.0.3:5000");
 
   // https://petzify.up.railway.app/
   // http://192.168.0.2:5000
